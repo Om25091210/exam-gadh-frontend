@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import '@eg/ui/theme.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/noto-sans-devanagari';
+@source '../../../../packages/ui/src';
+
+html,
+body {
+  min-height: 100%;
+}

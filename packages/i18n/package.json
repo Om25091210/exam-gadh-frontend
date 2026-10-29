@@ -1,0 +1,10 @@
+{
+  "name": "@eg/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p .", "lint": "tsc -p . --noEmit", "test": "vitest run --passWithNoTests" },
+  "peerDependencies": { "react": "^19" },
+  "devDependencies": { "@types/react": "19.1.17", "react": "19.1.10", "vitest": "3.2.7" }
+}

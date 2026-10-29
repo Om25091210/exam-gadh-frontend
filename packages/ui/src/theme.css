@@ -1,0 +1,76 @@
+/* ExamGadh design tokens (Tailwind v4 @theme). Ink-on-paper, calm green, saffron accent: from the line-art logo. */
+@theme {
+  --font-sans: 'Inter Variable', 'Noto Sans Devanagari Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #fbf9f5;
+  --color-surface: #ffffff;
+  --color-line: #e7e2da;
+  --color-ink-900: #1c1917;
+  --color-ink-700: #44403c;
+  --color-ink-500: #6b645e; /* 5.3:1 on paper: passes AA for body text */
+  --color-ink-300: #b8b1a8;
+
+  --color-primary-50: #ecf8f4;
+  --color-primary-100: #d1efe5;
+  --color-primary-500: #1f9a7f;
+  --color-primary-600: #137c66;
+  --color-primary-700: #0e6350;
+  --color-primary-800: #0b4e40;
+
+  --color-accent-100: #fdebd0;
+  --color-accent-500: #e07a10;
+  --color-accent-700: #9a4a04;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-600: #b91c1c;
+  --color-danger-700: #991b1b;
+  --color-success-50: #f0fdf4;
+  --color-success-600: #15803d;
+  --color-warning-50: #fffbeb;
+  --color-warning-700: #92400e;
+  --color-info-50: #eff6ff;
+  --color-info-700: #1d4ed8;
+
+  /* Exam-hall question palette states (colour is never the only signal: shape/text also differ) */
+  --color-q-notvisited: #e7e5e4;
+  --color-q-notanswered: #dc2626;
+  --color-q-answered: #16a34a;
+  --color-q-marked: #7c3aed;
+
+  --radius-card: 0.875rem;
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.05), 0 1px 3px rgb(28 25 23 / 0.06);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+  }
+  /* Devanagari needs more room for matras */
+  html[lang='hi'] body {
+    line-height: 1.75;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-accent-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  button,
+  [role='button'],
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
