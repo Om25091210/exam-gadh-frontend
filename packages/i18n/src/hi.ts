@@ -502,4 +502,9 @@ export const hi: Record<MessageKey, string> = {
   'profile.export.done': 'आपका डेटा डाउनलोड हो गया।',
   'profile.delete.type': 'पुष्टि के लिए DELETE लिखें',
   'profile.delete.final': 'मेरा खाता हमेशा के लिए हटाएँ',
+  'home.quick': 'सीधे शुरू करें',
+  'home.today': 'आज',
+  'auth.feat.tests': 'हिंदी और अंग्रेज़ी में पूर्ण मॉक टेस्ट',
+  'auth.feat.analytics': 'कमज़ोर टॉपिक पहचानें और जल्दी सुधारें',
+  'auth.feat.doubts': 'अपने संदेह पूछें, मेंटर से उत्तर पाएँ',
 };

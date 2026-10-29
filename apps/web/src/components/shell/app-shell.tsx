@@ -35,10 +35,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-surface focus:p-3 focus:shadow-lg">
         {t('common.skipToContent')}
       </a>
-      <header className="sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur">
+      <header className="glass sticky top-0 z-30 border-b border-line/70">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
           <Link href="/" className="flex items-center gap-2 font-bold text-primary-800">
-            <Image src="/logo.png" alt="" width={36} height={36} className="mix-blend-multiply" />
+            <Image src="/logo.png" alt="" width={40} height={40} className="mix-blend-multiply" />
             <span className="hidden sm:inline">{t('app.name')}</span>
           </Link>
           <div className="flex items-center gap-1">
@@ -53,27 +53,29 @@ export function AppShell({ children }: { children: ReactNode }) {
           {NAV.map((n) => {
             const active = isActive(n, pathname);
             return (
-              <Link key={n.href} href={n.href} aria-current={active ? 'page' : undefined} className={cn('flex min-h-11 items-center gap-3 rounded-xl px-3 font-semibold', active ? 'bg-primary-100 text-primary-800' : 'text-ink-700 hover:bg-black/5')}>
+              <Link key={n.href} href={n.href} aria-current={active ? 'page' : undefined} className={cn('flex min-h-11 items-center gap-3 rounded-xl px-3 font-semibold transition-colors', active ? 'bg-gradient-to-r from-primary-100 to-primary-50 text-primary-800 shadow-sm ring-1 ring-primary-500/20' : 'text-ink-700 hover:bg-black/5')}>
                 <n.icon className="size-5" aria-hidden />
                 {t(n.label)}
               </Link>
             );
           })}
         </nav>
-        <main id="main" tabIndex={-1} className="min-w-0 flex-1 py-4 pb-28 md:pb-10">
+        <main id="main" tabIndex={-1} className="min-w-0 flex-1 py-4 pb-32 md:pb-10">
           {children}
           <p className="mt-10 text-center text-xs text-ink-500">{t('footer.note')}</p>
         </main>
       </div>
 
-      <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
+      <nav aria-label="Main" className="glass fixed inset-x-2 bottom-2 z-30 rounded-2xl border border-line/70 pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-lift)] md:hidden">
         <ul className="mx-auto grid max-w-md grid-cols-5">
           {NAV.map((n) => {
             const active = isActive(n, pathname);
             return (
               <li key={n.href}>
                 <Link href={n.href} aria-current={active ? 'page' : undefined} className={cn('flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold', active ? 'text-primary-700' : 'text-ink-500')}>
-                  <n.icon className={cn('size-6', active && 'stroke-[2.5]')} aria-hidden />
+                  <span className={cn('grid h-7 w-12 place-items-center rounded-full transition-colors', active && 'bg-primary-100')}>
+                    <n.icon className={cn('size-5', active && 'stroke-[2.5]')} aria-hidden />
+                  </span>
                   {t(n.label)}
                 </Link>
               </li>

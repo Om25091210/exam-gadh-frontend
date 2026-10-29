@@ -8,3 +8,4 @@ export * from './language-toggle';
 export * from './table';
 export * from './rich-text';
 export * from './question-view';
+export * from './illustrations';

@@ -6,13 +6,13 @@ import { cn } from './cn';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'accent';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-const base = 'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors select-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-offset-2';
+const base = 'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-150 select-none active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-offset-2';
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-800',
-  secondary: 'bg-surface text-ink-900 border border-line hover:bg-primary-50',
+  primary: 'bg-gradient-to-b from-primary-600 to-primary-700 text-white shadow-[var(--shadow-glow)] hover:from-primary-700 hover:to-primary-800',
+  secondary: 'bg-surface text-ink-900 border border-line shadow-sm hover:border-primary-500/40 hover:bg-primary-50',
   ghost: 'text-ink-700 hover:bg-black/5',
   danger: 'bg-danger-600 text-white hover:bg-danger-700',
-  accent: 'bg-accent-500 text-ink-900 hover:brightness-95',
+  accent: 'bg-gradient-to-b from-[#f5961f] to-accent-500 text-ink-900 shadow-[0_8px_20px_-6px_rgb(224_122_16/0.55)] hover:brightness-95',
 };
 const sizes: Record<ButtonSize, string> = {
   sm: 'min-h-9 px-3 text-sm',

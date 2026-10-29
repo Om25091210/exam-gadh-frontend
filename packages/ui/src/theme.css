@@ -37,8 +37,41 @@
   --color-q-answered: #16a34a;
   --color-q-marked: #7c3aed;
 
-  --radius-card: 0.875rem;
-  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.05), 0 1px 3px rgb(28 25 23 / 0.06);
+  --color-primary-900: #073a30;
+  --color-accent-50: #fff7ea;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.04), 0 4px 16px -4px rgb(28 25 23 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(28 25 23 / 0.05), 0 12px 28px -8px rgb(14 99 80 / 0.22);
+  --shadow-glow: 0 8px 24px -6px rgb(19 124 102 / 0.55);
+
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+}
+
+/* Reusable looks. Gradients stay inside the brand greens/saffron so text contrast on them is checked once here. */
+@utility bg-hero {
+  background: radial-gradient(120% 140% at 0% 0%, #1f9a7f 0%, #0e6350 45%, #073a30 100%);
+}
+@utility bg-hero-warm {
+  background: linear-gradient(135deg, #fff1d6 0%, #fdebd0 40%, #fbd9a4 100%);
+}
+@utility bg-mesh {
+  background-color: var(--color-paper);
+  background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(31 154 127 / 0.14), transparent 60%), radial-gradient(40rem 24rem at -10% 20%, rgb(224 122 16 / 0.10), transparent 60%);
+  background-attachment: fixed;
+}
+@utility glass {
+  background: rgb(255 255 255 / 0.78);
+  backdrop-filter: blur(14px) saturate(160%);
 }
 
 @layer base {
@@ -47,6 +80,8 @@
   }
   body {
     background: var(--color-paper);
+    background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(31 154 127 / 0.12), transparent 60%), radial-gradient(40rem 24rem at -10% 25%, rgb(224 122 16 / 0.08), transparent 60%);
+    background-attachment: fixed;
     color: var(--color-ink-900);
     font-family: var(--font-sans);
     line-height: 1.55;

@@ -75,7 +75,7 @@ export function ProgressBar({ value, max = 100, label, tone = 'primary' }: { val
   const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   return (
     <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} className="h-2 w-full overflow-hidden rounded-full bg-black/10">
-      <div className={cn('h-full rounded-full', tone === 'primary' ? 'bg-primary-600' : 'bg-accent-500')} style={{ width: `${pct}%` }} />
+      <div className={cn('h-full rounded-full', tone === 'primary' ? 'bg-gradient-to-r from-primary-500 to-primary-700' : 'bg-gradient-to-r from-[#f5961f] to-accent-500', 'transition-[width] duration-700')} style={{ width: `${pct}%` }} />
     </div>
   );
 }

@@ -500,6 +500,11 @@ export const en = {
   'profile.export.done': 'Your data was downloaded.',
   'profile.delete.type': 'Type DELETE to confirm',
   'profile.delete.final': 'Delete my account for good',
+  'home.quick': 'Jump back in',
+  'home.today': 'Today',
+  'auth.feat.tests': 'Full-length mock tests in Hindi and English',
+  'auth.feat.analytics': 'Know your weak topics, fix them fast',
+  'auth.feat.doubts': 'Ask doubts and get answers from mentors',
 } as const;
 
 export type MessageKey = keyof typeof en;
