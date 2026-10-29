@@ -226,6 +226,7 @@ export interface ResultReleased {
 export type AttemptResultView = ResultNotReleased | ResultReleased;
 
 export interface ReviewQuestion extends Omit<AttemptQuestion, 'en' | 'hi'> {
+  questionId: string;
   en?: QuestionLang;
   hi?: QuestionLang;
   correctOption: number;
@@ -300,3 +301,27 @@ export interface Home {
   unreadNotifications: number;
   plan: { active: Array<{ planId: string; nameEn: string; nameHi: string; endsAt: string; daysLeft: number }>; expiringSoon: boolean };
 }
+
+// ---------------------------------------------------------------- learning helpers
+export interface BookmarkedQuestion {
+  questionId: string;
+  type: AttemptQuestion['type'];
+  topicCode: string;
+  en?: QuestionLang;
+  hi?: QuestionLang;
+  /** null until the result of a test containing this question is released */
+  correctOption: number | null;
+}
+export interface Bookmarks {
+  questions: BookmarkedQuestion[];
+  materials: Array<{ id: string; titleEn: string; titleHi: string; kind: string }>;
+  currentAffairs: Array<{ id: string; titleEn: string; titleHi: string; date: string }>;
+}
+export type BookmarkBody = { kind: 'question'; attemptId: string; qid: string } | { kind: 'material' | 'current_affair'; refId: string };
+export interface QuestionNote {
+  questionId: string;
+  text: string;
+  updatedAt: string;
+  question: BookmarkedQuestion | null;
+}
+export type ReportReason = 'wrong_answer' | 'typo' | 'unclear' | 'translation' | 'other';

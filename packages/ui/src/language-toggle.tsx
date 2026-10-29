@@ -7,10 +7,17 @@ const OPTIONS: Array<{ lang: Lang; short: string; label: string }> = [
   { lang: 'en', short: 'EN', label: 'English' },
 ];
 
-export function LanguageToggle({ className }: { className?: string }) {
-  const { lang, setLang, t } = useI18n();
+/**
+ * Hindi / English switch. By default it changes the app language; pass `value` and `onChange` to control something else
+ * (the exam hall uses it for the language of the questions, which is separate from the interface language).
+ */
+export function LanguageToggle({ className, value, onChange, label }: { className?: string; value?: Lang; onChange?: (l: Lang) => void; label?: string }) {
+  const i18n = useI18n();
+  const lang = value ?? i18n.lang;
+  const setLang = onChange ?? i18n.setLang;
+  const t = i18n.t;
   return (
-    <div role="group" aria-label={t('common.language')} className={cn('inline-flex rounded-xl bg-black/5 p-1', className)}>
+    <div role="group" aria-label={label ?? t('common.language')} className={cn('inline-flex rounded-xl bg-black/5 p-1', className)}>
       {OPTIONS.map((o) => (
         <button
           key={o.lang}
