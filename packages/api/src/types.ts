@@ -325,3 +325,315 @@ export interface QuestionNote {
   question: BookmarkedQuestion | null;
 }
 export type ReportReason = 'wrong_answer' | 'typo' | 'unclear' | 'translation' | 'other';
+
+// ---------------------------------------------------------------- learning content
+export interface CaItem {
+  id: string;
+  date: string;
+  category: 'CG' | 'NAT';
+  titleEn: string;
+  titleHi: string;
+  topicCode: string | null;
+  tags: string[];
+  access: 'free' | 'paid';
+  locked: boolean;
+  imageUrl: string | null;
+  /** absent on a locked item: only the headline is shown */
+  summaryEn?: string;
+  summaryHi?: string;
+  angleEn?: string | null;
+  angleHi?: string | null;
+  sourceUrl?: string | null;
+  quizTestId?: string | null;
+}
+export interface CaMonth {
+  month: string;
+  total: number;
+  days: Array<{ date: string; items: CaItem[] }>;
+}
+export interface MaterialItem {
+  id: string;
+  titleEn: string;
+  titleHi: string;
+  kind: 'pdf' | 'video' | 'link';
+  subjectCode: string | null;
+  topicCode: string | null;
+  examId: string | null;
+  access: 'free' | 'paid';
+  locked: boolean;
+}
+export interface MaterialDetail {
+  id: string;
+  titleEn: string;
+  titleHi: string;
+  kind: 'pdf' | 'video' | 'link';
+  url: string | null;
+  downloadUrl: string | null;
+}
+export interface PyqPaper {
+  id: string;
+  examId: string;
+  titleEn: string;
+  titleHi: string;
+  year: number | null;
+  paper: { code: string; nameEn: string; nameHi: string } | null;
+  questionCount: number | null;
+  durationMin: number | null;
+  maxScore: number | null;
+  access: 'free' | 'paid';
+  locked: boolean;
+}
+export interface PyqYears {
+  years: Array<{ year: number | null; papers: PyqPaper[] }>;
+}
+export interface PyqFrequency {
+  total: number;
+  topics: Array<{ topicCode: string; nameEn?: string; nameHi?: string; questions: number; sharePct: number }>;
+}
+export interface Faq {
+  id: string;
+  keywords: string;
+  qEn: string;
+  qHi: string;
+  aEn: string;
+  aHi: string;
+}
+export interface InterviewQuestion {
+  id: string;
+  examId: string;
+  category: string;
+  qEn: string;
+  qHi: string;
+  pointsEn: string;
+  pointsHi: string;
+}
+export interface SeriesSummary {
+  id: string;
+  examId: string;
+  titleEn: string;
+  titleHi: string;
+  descEn: string | null;
+  descHi: string | null;
+  access: 'free' | 'paid';
+  tests: number;
+  enrolled: boolean;
+  locked: boolean;
+}
+export interface SeriesDetail {
+  id: string;
+  examId: string;
+  titleEn: string;
+  titleHi: string;
+  descEn: string | null;
+  descHi: string | null;
+  access: 'free' | 'paid';
+  enrolled: boolean;
+  locked: boolean;
+  progress: { total: number; attempted: number };
+  tests: Array<{ id: string; titleEn: string; titleHi: string; kind: TestKind; mode: 'static' | 'live'; access: 'free' | 'paid'; locked: boolean; bestPct: number | null }>;
+}
+
+// ---------------------------------------------------------------- analytics, revision, practice
+export interface TopicStat {
+  topicCode: string;
+  nameEn: string;
+  nameHi: string;
+  subjectCode: string | null;
+  attempted: number;
+  correct: number;
+  accuracyPct: number | null;
+  avgTimeSec: number | null;
+  strength: 'new' | 'weak' | 'ok' | 'strong';
+}
+export interface Insight {
+  kind: 'weak_topic' | 'rushing' | 'negative_marking' | 'get_started' | 'strong';
+  topicCode?: string;
+  messageEn: string;
+  messageHi: string;
+  action?: { type: 'practice_topic' | 'take_diagnostic'; topicCode?: string };
+}
+export interface Analytics {
+  rangeDays: number;
+  topics: TopicStat[];
+  subjects: Array<{ subjectCode: string; nameEn: string; nameHi: string; attempted: number; accuracyPct: number | null }>;
+  progress: Array<{ weekStarting: string; avgPct: number; tests: number }>;
+  time: { avgSecPerAnswered: number | null; rushedWrongAnswers: number; slowCorrectAnswers: number };
+  marks: { testsTaken: number; negativeDeducted: number };
+  insights: Insight[];
+}
+export interface Revision {
+  total: number;
+  questions: Array<BookmarkedQuestion & { reasons: Array<'wrong' | 'bookmarked'> }>;
+}
+export type PracticeBody = { source: 'topic'; topicCode: string; count?: number } | { source: 'revision'; count?: number };
+export interface OverallLeaderboard {
+  period: 'week' | 'month' | 'all';
+  total: number;
+  entries: LeaderboardEntry[];
+  me: LeaderboardEntry | null;
+}
+
+// ---------------------------------------------------------------- notifications, doubts, planner
+export interface AppNotification {
+  id: string;
+  kind: string;
+  titleEn: string;
+  titleHi: string;
+  bodyEn: string;
+  bodyHi: string;
+  data: Record<string, unknown> | null;
+  read: boolean;
+  createdAt: string;
+}
+export interface NotificationPage {
+  items: AppNotification[];
+  total: number;
+  unread: number;
+  page: number;
+  pageSize: number;
+}
+export interface DoubtQuota {
+  paid: boolean;
+  daily: { limit: number; used: number };
+  monthly: { limit: number; used: number } | null;
+}
+export type DoubtStatus = 'open' | 'answered' | 'closed';
+export interface DoubtListItem {
+  id: string;
+  status: DoubtStatus;
+  contextType: string;
+  topicCode: string | null;
+  preview: string;
+  messages: number;
+  rating: number | null;
+  slaDueAt: string;
+  answeredAt: string | null;
+  createdAt: string;
+}
+export interface DoubtThread {
+  id: string;
+  status: DoubtStatus;
+  contextType: string;
+  contextId: string | null;
+  topicCode: string | null;
+  rating: number | null;
+  reopened: boolean;
+  slaDueAt: string;
+  firstResponseAt: string | null;
+  answeredAt: string | null;
+  createdAt: string;
+  messages: Array<{ id: string; from: 'student' | 'staff'; text: string; createdAt: string; attachments: Array<{ key: string; url: string }> }>;
+}
+export interface DoubtCreateBody {
+  contextType?: 'question' | 'note' | 'current_affair' | 'free';
+  contextId?: string;
+  examId?: string;
+  topicCode?: string;
+  text: string;
+  attachmentKeys?: string[];
+}
+export interface PresignedPost {
+  key: string;
+  url: string;
+  fields: Record<string, string>;
+  maxBytes: number;
+  expiresInSec: number;
+}
+export interface PlanTask {
+  type: 'study' | 'practice' | 'revision' | 'mock' | 'rest';
+  topicCode?: string;
+  minutes: number;
+  titleEn: string;
+  titleHi: string;
+}
+export interface PlanDay {
+  date: string;
+  minutes: number;
+  tasks: PlanTask[];
+}
+export interface StudyPlan {
+  version: 1;
+  generatedAt: string;
+  examId: string;
+  hoursPerDay: number;
+  startDate: string;
+  endDate: string;
+  weeks: Array<{ week: number; startDate: string; phase: 'learn' | 'revise'; focus: Array<{ topicCode: string; nameEn: string; nameHi: string }>; days: PlanDay[]; noteEn?: string; noteHi?: string }>;
+  summary: { weeks: number; studyMinutes: number };
+}
+export interface MentorRequestView {
+  id: string;
+  examId: string;
+  hoursPerDay: number;
+  examDate: string | null;
+  status: 'open' | 'sent';
+  createdAt: string;
+  sentAt: string | null;
+  /** null until the mentor sends it */
+  plan: StudyPlan | null;
+}
+export interface PlanToday {
+  plan: { requestId: string; startDate: string; endDate: string } | null;
+  date: string;
+  day: PlanDay | null;
+}
+
+// ---------------------------------------------------------------- billing
+export interface BillingPlan {
+  id: string;
+  nameEn: string;
+  nameHi: string;
+  /** rupees per duration in months, e.g. { "3": 399, "12": 999 } */
+  prices: Record<string, number>;
+  trialDays: number;
+  topTier: boolean;
+  examIds: string[];
+}
+export interface Entitlement {
+  id: string;
+  planId: string;
+  startsAt: string;
+  endsAt: string;
+  source: string;
+}
+export interface CreatedOrder {
+  orderId: string;
+  razorpayOrderId: string;
+  amountPaise: number;
+  currency: string;
+  keyId: string;
+}
+export interface OrderRow {
+  id: string;
+  planId: string;
+  planNameEn: string;
+  planNameHi: string;
+  months: number;
+  amountPaise: number;
+  currency: string;
+  status: 'created' | 'paid' | 'failed' | 'refunded';
+  couponCode: string | null;
+  createdAt: string;
+  paymentStatus: string | null;
+  invoiceNumber: string | null;
+}
+export interface Receipt {
+  number: string;
+  issuedAt: string;
+  customer: { name: string; email: string };
+  plan: { id: string; nameEn: string; nameHi: string };
+  months: number;
+  amountPaise: number;
+  currency: string;
+  couponCode: string | null;
+  paymentId: string | null;
+  method: string | null;
+  status: string;
+}
+
+export interface Subject {
+  code: string;
+  nameEn: string;
+  nameHi: string;
+  topics: Array<{ code: string; nameEn: string; nameHi: string; subjectCode: string }>;
+}
