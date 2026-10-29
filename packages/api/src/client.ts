@@ -37,6 +37,8 @@ export type Query = Record<string, string | number | boolean | null | undefined>
 export interface RequestOptions {
   query?: Query;
   body?: unknown;
+  /** multipart upload; the browser sets the Content-Type with its boundary */
+  form?: FormData;
   signal?: AbortSignal;
   headers?: Record<string, string>;
   /** do not try to refresh/sign out on 401 (used by the refresh call itself) */
@@ -58,7 +60,7 @@ export function createHttp(opts: HttpOptions = {}) {
 
   async function once(method: Method, path: string, o: RequestOptions, token: string | null): Promise<Response> {
     const headers: Record<string, string> = { Accept: 'application/json', ...(o.headers ?? {}) };
-    if (o.body !== undefined) headers['Content-Type'] = 'application/json';
+    if (o.body !== undefined && !o.form) headers['Content-Type'] = 'application/json';
     if (token && !o.noAuth) headers.Authorization = `Bearer ${token}`;
     if (opts.clientId) headers['X-Client-Id'] = opts.clientId;
     if (method !== 'GET') {
@@ -69,7 +71,7 @@ export function createHttp(opts: HttpOptions = {}) {
       return await doFetch(buildUrl(opts.baseUrl ?? '', path, o.query), {
         method,
         headers,
-        body: o.body === undefined ? undefined : JSON.stringify(o.body),
+        body: o.form ?? (o.body === undefined ? undefined : JSON.stringify(o.body)),
         signal: o.signal,
         credentials: opts.credentials ?? 'same-origin',
         keepalive: o.keepalive,
@@ -114,8 +116,22 @@ export function createHttp(opts: HttpOptions = {}) {
     return (await res.json()) as T;
   }
 
+  /** Fetches a file (CSV export, receipt…) as a Blob together with the filename the server suggested. */
+  async function download(path: string, query?: Query): Promise<{ blob: Blob; filename: string }> {
+    const res = await once('GET', path, { query }, opts.getAccessToken?.() ?? null);
+    if (!res.ok) {
+      const err = await parseError(res);
+      if (res.status === 401) opts.onSessionEnded?.(err.code);
+      throw err;
+    }
+    const m = /filename="?([^";]+)"?/i.exec(res.headers.get('Content-Disposition') ?? '');
+    return { blob: await res.blob(), filename: m?.[1] ?? 'download' };
+  }
+
   return {
     request,
+    download,
+    postForm: <T>(path: string, form: FormData, query?: Query) => request<T>('POST', path, { form, query }),
     get: <T>(path: string, query?: Query, o: Omit<RequestOptions, 'query' | 'body'> = {}) => request<T>('GET', path, { ...o, query }),
     post: <T>(path: string, body?: unknown, o: Omit<RequestOptions, 'body'> = {}) => request<T>('POST', path, { ...o, body: body ?? {} }),
     put: <T>(path: string, body?: unknown, o: Omit<RequestOptions, 'body'> = {}) => request<T>('PUT', path, { ...o, body: body ?? {} }),

@@ -1,9 +1,9 @@
 'use client';
 import type { BookmarkedQuestion } from '@eg/api';
 import { useI18n } from '@eg/i18n';
-import { Alert, Card, RichText } from '@eg/ui';
+import { Alert, Card, Options, pickBody, QuestionBody, RichText } from '@eg/ui';
 import type { ReactNode } from 'react';
-import { Options, pickBody, QuestionBody } from './exam/question-view';
+
 
 /** A saved question (bookmark / revision / note). The right answer is shown only when the server released it. */
 export function QuestionCard({ q, actions, badges }: { q: BookmarkedQuestion; actions?: ReactNode; badges?: ReactNode }) {

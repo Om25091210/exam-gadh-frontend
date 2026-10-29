@@ -38,11 +38,12 @@ interface Ctx {
 const I18nContext = createContext<Ctx | null>(null);
 const STORAGE_KEY = 'eg_lang';
 
-export function I18nProvider({ children, initial = DEFAULT_LANG, onChange }: { children: ReactNode; initial?: Lang; onChange?: (l: Lang) => void }) {
+export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persist = true }: { children: ReactNode; initial?: Lang; onChange?: (l: Lang) => void; persist?: boolean }) {
   const [lang, setLangState] = useState<Lang>(initial);
 
   // the server renders the default; the stored choice is applied on the client
   useEffect(() => {
+    if (!persist) return;
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (isLang(saved) && saved !== lang) setLangState(saved);
@@ -59,14 +60,16 @@ export function I18nProvider({ children, initial = DEFAULT_LANG, onChange }: { c
   const setLang = useCallback(
     (l: Lang) => {
       setLangState(l);
-      try {
-        localStorage.setItem(STORAGE_KEY, l);
-      } catch {
-        /* ignore */
+      if (persist) {
+        try {
+          localStorage.setItem(STORAGE_KEY, l);
+        } catch {
+          /* ignore */
+        }
       }
       onChange?.(l);
     },
-    [onChange],
+    [onChange, persist],
   );
 
   const value = useMemo<Ctx>(() => {

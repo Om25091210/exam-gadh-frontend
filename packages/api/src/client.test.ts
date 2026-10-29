@@ -65,4 +65,20 @@ describe('createHttp', () => {
     expect(f.mock.calls[0][1].headers['X-CSRF-Token']).toBeUndefined();
     expect(f.mock.calls[1][1].headers['X-CSRF-Token']).toBe('csrf');
   });
+
+  it('uploads multipart without forcing a JSON content type, and reads a download filename', async () => {
+    const f = vi.fn().mockImplementation(async () => new Response('a,b\n1,2', { status: 200, headers: { 'Content-Disposition': 'attachment; filename="questions.csv"' } }));
+    const http = createHttp({ getCsrfToken: () => 'csrf', fetchImpl: f });
+    const form = new FormData();
+    form.append('file', new Blob(['x']), 'x.csv');
+    await http.postForm('/admin/import/questions/preview', form, { allowDuplicates: 'true' }).catch(() => undefined);
+    const [url, init] = f.mock.calls[0];
+    expect(url).toBe('/v1/admin/import/questions/preview?allowDuplicates=true');
+    expect(init.body).toBe(form);
+    expect(init.headers['Content-Type']).toBeUndefined();
+    expect(init.headers['X-CSRF-Token']).toBe('csrf');
+    const d = await http.download('/admin/export/questions', { format: 'csv' });
+    expect(d.filename).toBe('questions.csv');
+    expect(await d.blob.text()).toBe('a,b\n1,2');
+  });
 });

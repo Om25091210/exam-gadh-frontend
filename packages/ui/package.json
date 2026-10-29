@@ -5,7 +5,8 @@
   "type": "module",
   "exports": { ".": "./src/index.ts", "./theme.css": "./src/theme.css" },
   "scripts": { "typecheck": "tsc -p .", "lint": "tsc -p . --noEmit", "test": "vitest run --passWithNoTests" },
-  "dependencies": { "@eg/i18n": "workspace:*", "lucide-react": "1.64.0" },
+  "dependencies": { "@eg/api": "workspace:*",
+    "@eg/i18n": "workspace:*", "lucide-react": "1.64.0" },
   "peerDependencies": { "react": "^19", "react-dom": "^19" },
   "devDependencies": { "@types/react": "19.1.17", "@types/react-dom": "19.1.11", "react": "19.1.10", "react-dom": "19.1.10", "vitest": "3.2.7" }
 }

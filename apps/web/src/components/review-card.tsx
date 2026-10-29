@@ -1,7 +1,7 @@
 'use client';
 import { ApiError, type ReportReason, type ReviewQuestion } from '@eg/api';
 import { useI18n, type MessageKey } from '@eg/i18n';
-import { Alert, Badge, Button, Card, Field, Modal, RichText, Select, Textarea, useToast } from '@eg/ui';
+import { Alert, Badge, Button, Card, Field, Modal, Options, pickBody, QuestionBody, RichText, Select, Textarea, useToast } from '@eg/ui';
 import { Bookmark, BookmarkCheck, Flag, MessageCircleQuestion, StickyNote } from 'lucide-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useApi } from '@/lib/auth';
 import { errorKey } from '@/lib/errors';
 import { formatSpent } from '@/lib/time';
-import { Options, pickBody, QuestionBody } from './exam/question-view';
+
 
 const REASONS: ReportReason[] = ['wrong_answer', 'typo', 'unclear', 'translation', 'other'];
 

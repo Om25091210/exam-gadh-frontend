@@ -1,7 +1,7 @@
 'use client';
 import { ApiError, type AttemptView, type SectionWindow } from '@eg/api';
 import { useI18n } from '@eg/i18n';
-import { Alert, Badge, Button, cn, ErrorState, LanguageToggle, Modal, Spinner } from '@eg/ui';
+import { Alert, Badge, Button, cn, ErrorState, LanguageToggle, Modal, Options, QuestionBody, Spinner } from '@eg/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { CheckCircle2, CloudOff, Loader2, Maximize, Timer, TriangleAlert } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,7 @@ import { SaveQueue, type SaveStatus } from '@/lib/exam/save-queue';
 import { ServerClock } from '@/lib/exam/server-clock';
 import { formatClock } from '@/lib/time';
 import { Legend, Palette } from './palette';
-import { Options, QuestionBody } from './question-view';
+
 
 type Boot = { view: AttemptView; snap: Snapshot | null } | { error: unknown } | null;
 

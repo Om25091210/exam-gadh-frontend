@@ -1,7 +1,8 @@
 'use client';
 import type { Lang, QuestionLang } from '@eg/api';
 import { useI18n } from '@eg/i18n';
-import { cn, RichText } from '@eg/ui';
+import { cn } from './cn';
+import { RichText } from './rich-text';
 import { Check, X } from 'lucide-react';
 
 export interface QuestionLike {
