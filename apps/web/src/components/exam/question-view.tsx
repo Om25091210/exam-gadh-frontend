@@ -53,8 +53,8 @@ export function QuestionBody({ q, lang }: { q: QuestionLike; lang: Lang }) {
         <div className="grid grid-cols-2 gap-3 text-base">
           <div>
             <p className="mb-1 font-semibold">{t('exam.matchA')}</p>
-            <ol className="space-y-1" type="a">
-              {body.listA.map((s, i) => <li key={i} className="flex gap-2"><span className="font-semibold">{'abcdef'[i]}.</span><RichText text={s} /></li>)}
+            <ol className="space-y-1">
+              {body.listA.map((s, i) => <li key={i} className="flex gap-2"><span className="font-semibold">{'ABCDEF'[i]}.</span><RichText text={s} /></li>)}
             </ol>
           </div>
           <div>
@@ -67,7 +67,7 @@ export function QuestionBody({ q, lang }: { q: QuestionLike; lang: Lang }) {
       ) : null}
       {q.type === 'chronology' && body.items ? (
         <ol className="space-y-1 text-base" aria-label={t('exam.order')}>
-          {body.items.map((s, i) => <li key={i} className="flex gap-2"><span className="font-semibold">{'ABCDEF'[i]}.</span><RichText text={s} /></li>)}
+          {body.items.map((s, i) => <li key={i} className="flex gap-2"><span className="font-semibold">{i + 1}.</span><RichText text={s} /></li>)}
         </ol>
       ) : null}
     </div>

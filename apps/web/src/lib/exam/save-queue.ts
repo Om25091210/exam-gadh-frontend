@@ -34,13 +34,16 @@ export class SaveQueue {
   private heartbeat: ReturnType<typeof setInterval> | null = null;
   private failures = 0;
   private stopped = false;
-  private readonly st: typeof setTimeout;
-  private readonly ct: typeof clearTimeout;
+  // wrapped so the browser never sees them called as methods of this object ("Illegal invocation")
+  private readonly st: (fn: () => void, ms: number) => ReturnType<typeof setTimeout>;
+  private readonly ct: (id: ReturnType<typeof setTimeout>) => void;
 
   constructor(private readonly o: SaveQueueOptions) {
     this.seq = o.startSeq;
-    this.st = o.setTimeoutFn ?? setTimeout;
-    this.ct = o.clearTimeoutFn ?? clearTimeout;
+    const st = o.setTimeoutFn;
+    const ct = o.clearTimeoutFn;
+    this.st = (fn, ms) => (st ? st(fn, ms) : setTimeout(fn, ms));
+    this.ct = (id) => (ct ? ct(id) : clearTimeout(id));
   }
 
   nextSeq = () => this.seq++;
