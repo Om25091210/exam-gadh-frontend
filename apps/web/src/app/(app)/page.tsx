@@ -1,9 +1,10 @@
 'use client';
 import { useI18n } from '@eg/i18n';
 import { Alert, Badge, buttonClasses, Card, ErrorState, ProgressBar, Section, Skeleton } from '@eg/ui';
-import { BarChart3, CalendarCheck, Flame, MessageCircleQuestion, Trophy } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { JourneyMap } from '@/components/home/journey';
 import { TrendChart } from '@/components/trend-chart';
 import { useApi, useAuth } from '@/lib/auth';
 import { formatClock } from '@/lib/time';
@@ -61,27 +62,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Section title={t('home.quick')}>
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {(
-            [
-              ['/practice', 'nav.practice', BarChart3, 'bg-primary-50 text-primary-700'],
-              ['/planner', 'nav.planner', CalendarCheck, 'bg-accent-100 text-accent-700'],
-              ['/doubts', 'nav.doubts', MessageCircleQuestion, 'bg-info-50 text-info-700'],
-              ['/leaderboard', 'nav.leaderboard', Trophy, 'bg-warning-50 text-warning-700'],
-            ] as const
-          ).map(([href, label, Icon, tone]) => (
-            <li key={href}>
-              <Link href={href} className="flex h-full flex-col items-start gap-3 rounded-card border border-line/80 bg-surface p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
-                <span className={`grid size-11 place-items-center rounded-xl ${tone}`}>
-                  <Icon className="size-6" aria-hidden />
-                </span>
-                <span className="font-semibold">{t(label)}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
 
       {h.plan.expiringSoon ? (
         <Alert tone="warning" className="mb-4">
@@ -113,6 +93,8 @@ export default function HomePage() {
           </ul>
         </Section>
       ) : null}
+
+      <JourneyMap liveOpen={h.live.some((l) => l.state === 'open')} />
 
       {h.live.length > 0 ? (
         <Section title={t('home.live')} className="mt-6">

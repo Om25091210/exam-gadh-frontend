@@ -28,6 +28,8 @@ export function isLang(v: unknown): v is Lang {
 interface Ctx {
   lang: Lang;
   setLang: (l: Lang) => void;
+  /** null until the stored choice has been read; false = the student has never picked a language */
+  chosen: boolean | null;
   t: (key: MessageKey, vars?: Record<string, string | number>) => string;
   /** pick the right language of a bilingual pair */
   b: (en: string | null | undefined, hi: string | null | undefined) => string;
@@ -40,6 +42,7 @@ const STORAGE_KEY = 'eg_lang';
 
 export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persist = true }: { children: ReactNode; initial?: Lang; onChange?: (l: Lang) => void; persist?: boolean }) {
   const [lang, setLangState] = useState<Lang>(initial);
+  const [chosen, setChosen] = useState<boolean | null>(persist ? null : true);
 
   // the server renders the default; the stored choice is applied on the client
   useEffect(() => {
@@ -47,8 +50,10 @@ export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persi
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (isLang(saved) && saved !== lang) setLangState(saved);
+      setChosen(isLang(saved));
     } catch {
       /* storage can be blocked; the default stays */
+      setChosen(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -60,6 +65,7 @@ export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persi
   const setLang = useCallback(
     (l: Lang) => {
       setLangState(l);
+      setChosen(true);
       if (persist) {
         try {
           localStorage.setItem(STORAGE_KEY, l);
@@ -78,6 +84,7 @@ export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persi
     return {
       lang,
       setLang,
+      chosen,
       t: (key, vars) => translate(lang, key, vars),
       b: (e, h) => bi(lang, e, h),
       fmt: {
@@ -87,7 +94,7 @@ export function I18nProvider({ children, initial = DEFAULT_LANG, onChange, persi
         time: (d) => new Intl.DateTimeFormat(locale, { timeStyle: 'short', timeZone: 'Asia/Kolkata', numberingSystem: 'latn' }).format(asDate(d)),
       },
     };
-  }, [lang, setLang]);
+  }, [lang, setLang, chosen]);
 
   return createElement(I18nContext.Provider, { value }, children);
 }
