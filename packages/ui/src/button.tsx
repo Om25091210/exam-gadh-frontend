@@ -12,7 +12,7 @@ const variants: Record<ButtonVariant, string> = {
   secondary: 'bg-surface text-ink-900 border border-line shadow-sm hover:border-primary-500/40 hover:bg-primary-50',
   ghost: 'text-ink-700 hover:bg-black/5',
   danger: 'bg-danger-600 text-white hover:bg-danger-700',
-  accent: 'bg-gradient-to-b from-[#f5961f] to-accent-500 text-ink-900 shadow-[0_8px_20px_-6px_rgb(224_122_16/0.55)] hover:brightness-95',
+  accent: 'bg-gradient-to-b from-[#f08f4c] to-accent-500 text-ink-900 shadow-[0_8px_20px_-6px_rgb(224_120_47/0.55)] hover:brightness-95',
 };
 const sizes: Record<ButtonSize, string> = {
   sm: 'min-h-9 px-3 text-sm',

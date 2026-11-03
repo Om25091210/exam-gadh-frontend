@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
           <div className="flex items-center gap-1">
             <LanguageToggle />
-            <NotificationBell />
+            {pathname !== '/' ? <NotificationBell /> : null}
           </div>
         </div>
       </header>
@@ -67,7 +67,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <nav aria-label="Main" className="glass fixed inset-x-2 bottom-2 z-30 rounded-2xl border border-line/70 pb-[env(safe-area-inset-bottom)] shadow-[var(--shadow-lift)] md:hidden">
-        <ul className="mx-auto grid max-w-md grid-cols-5">
+        <ul className="mx-auto grid max-w-md grid-cols-4">
           {NAV.map((n) => {
             const active = isActive(n, pathname);
             return (

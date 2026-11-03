@@ -1,7 +1,7 @@
 'use client';
 import { useI18n } from '@eg/i18n';
 import { Alert, Button, Card, Checkbox, Field, Input, Modal, PageHeader, Section, Select, useToast } from '@eg/ui';
-import { CalendarCheck, CreditCard, HelpCircle, LogOut, MessageCircleQuestion, ReceiptText, type LucideIcon } from 'lucide-react';
+import { BarChart3, CalendarCheck, CreditCard, HelpCircle, LogOut, MessageCircleQuestion, Megaphone, Mic, ReceiptText, Target, type LucideIcon } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -10,10 +10,14 @@ import { useApi, useAuth } from '@/lib/auth';
 import { errorKey } from '@/lib/errors';
 
 const SHORTCUTS: Array<{ href: string; label: MessageKey; icon: LucideIcon }> = [
+  { href: '/practice', label: 'me.practice', icon: Target },
+  { href: '/practice/analytics', label: 'me.analytics', icon: BarChart3 },
   { href: '/plans', label: 'nav.plans', icon: CreditCard },
   { href: '/me/orders', label: 'me.orders', icon: ReceiptText },
   { href: '/doubts', label: 'nav.doubts', icon: MessageCircleQuestion },
   { href: '/planner', label: 'nav.planner', icon: CalendarCheck },
+  { href: '/learn/interview', label: 'nav.interview', icon: Mic },
+  { href: '/learn/updates', label: 'nav.updates', icon: Megaphone },
   { href: '/learn/faqs', label: 'nav.faqs', icon: HelpCircle },
 ];
 

@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, ClipboardList, Home, User, type LucideIcon } from 'lucide-react';
+import { GraduationCap, Map as MapIcon, Trophy, User, type LucideIcon } from 'lucide-react';
 import type { MessageKey } from '@eg/i18n';
 
 export interface NavItem {
@@ -9,16 +9,16 @@ export interface NavItem {
   match: string[];
 }
 
-/** The five places a student goes most. Everything else is reached from these hubs. */
+/** The four tabs. Everything else is reached from the journey map or the profile hub. */
 export const NAV: NavItem[] = [
-  { href: '/', label: 'nav.home', icon: Home, match: [] },
-  { href: '/tests', label: 'nav.tests', icon: ClipboardList, match: ['/tests', '/series', '/results'] },
-  { href: '/learn', label: 'nav.learn', icon: BookOpen, match: ['/learn'] },
-  { href: '/practice', label: 'nav.practice', icon: BarChart3, match: ['/practice', '/leaderboard', '/planner'] },
-  { href: '/me', label: 'nav.me', icon: User, match: ['/me', '/plans', '/doubts', '/notifications'] },
+  { href: '/', label: 'tab.journey', icon: MapIcon, match: ['/tests', '/series', '/results', '/learn', '/practice'] },
+  { href: '/planner', label: 'tab.mentor', icon: GraduationCap, match: ['/doubts'] },
+  { href: '/leaderboard', label: 'nav.leaderboard', icon: Trophy, match: [] },
+  { href: '/me', label: 'nav.profile', icon: User, match: ['/plans', '/notifications'] },
 ];
 
 export function isActive(item: NavItem, pathname: string): boolean {
-  if (item.href === '/') return pathname === '/';
-  return [item.href, ...item.match].some((m) => pathname === m || pathname.startsWith(`${m}/`));
+  const inside = (m: string) => pathname === m || pathname.startsWith(`${m}/`);
+  if (item.href === '/' && pathname === '/') return true;
+  return (item.href === '/' ? item.match : [item.href, ...item.match]).some(inside);
 }
