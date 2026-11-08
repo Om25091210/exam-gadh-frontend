@@ -20,7 +20,8 @@ COPY --from=build /app/apps/$APP/.next/standalone ./
 COPY --from=build /app/apps/$APP/.next/static ./apps/$APP/.next/static
 COPY --from=build /app/apps/$APP/public ./apps/$APP/public
 # Next writes its image-optimisation cache here
-RUN mkdir -p apps/$APP/.next/cache && chown -R node:node apps/$APP/.next/cache
+# files must be readable by the non-root runtime user whatever their mode was in the checkout
+RUN chmod -R a+rX apps/$APP/public apps/$APP/.next/static && mkdir -p apps/$APP/.next/cache && chown -R node:node apps/$APP/.next/cache
 USER node
 EXPOSE 3000
 CMD ["sh", "-c", "node apps/$APP/server.js"]
