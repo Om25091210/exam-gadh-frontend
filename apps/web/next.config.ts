@@ -24,6 +24,8 @@ const csp = [
 
 const config: NextConfig = {
   output: 'standalone',
+  // the logo is a small static file; the optimiser (sharp + self-fetch) is not needed and fails inside the container
+  images: { unoptimized: true },
   reactStrictMode: true,
   poweredByHeader: false,
   transpilePackages: ['@eg/ui', '@eg/api', '@eg/i18n'],
