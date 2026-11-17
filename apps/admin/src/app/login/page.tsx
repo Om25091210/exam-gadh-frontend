@@ -7,7 +7,7 @@ import { useAdmin } from '@/lib/auth';
 import { adminErrorText } from '@/lib/errors';
 
 export default function LoginPage() {
-  const { phase, login, endedReason } = useAdmin();
+  const { phase, login, completeSignIn, endedReason } = useAdmin();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +24,11 @@ export default function LoginPage() {
     setError(null);
     try {
       const r = await login(email.trim(), password);
+      if (r.signedIn) {
+        await completeSignIn(r.csrfToken); // testing mode: no two-factor step
+        router.replace('/dashboard');
+        return;
+      }
       router.push(r.mfaEnrolled ? '/login/mfa' : '/login/setup');
     } catch (err) {
       setError(adminErrorText(err));

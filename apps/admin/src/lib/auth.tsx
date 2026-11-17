@@ -7,6 +7,9 @@ type Phase = 'loading' | 'anon' | 'authed';
 interface Pre {
   mfaEnrolled: boolean;
   mustChangePassword: boolean;
+  /** TEMPORARY testing switch on the server: the password alone completed the sign-in */
+  signedIn: boolean;
+  csrfToken: string;
 }
 interface Ctx {
   phase: Phase;
@@ -72,7 +75,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     async (email: string, password: string) => {
       const r = await api.login(email, password);
       csrf.current = r.csrfToken;
-      const p = { mfaEnrolled: r.mfaEnrolled, mustChangePassword: r.mustChangePassword };
+      const p = { mfaEnrolled: r.mfaEnrolled, mustChangePassword: r.mustChangePassword, signedIn: r.mfaRequired === false, csrfToken: r.csrfToken };
       setPre(p);
       setEnded(null);
       return p;
