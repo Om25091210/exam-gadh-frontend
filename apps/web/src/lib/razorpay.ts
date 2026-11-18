@@ -14,7 +14,7 @@ interface RazorpayOptions {
   prefill?: { name?: string; email?: string };
   theme?: { color?: string };
   handler: (r: RazorpaySuccess) => void;
-  modal?: { ondismiss?: () => void };
+  modal?: { ondismiss?: () => void; confirm_close?: boolean };
 }
 interface RazorpayInstance {
   open: () => void;
@@ -49,6 +49,8 @@ export type CheckoutResult = { status: 'paid'; payment: RazorpaySuccess } | { st
 export async function openCheckout(o: { keyId: string; orderId: string; amountPaise: number; currency: string; description: string; name?: string; email?: string }): Promise<CheckoutResult> {
   await loadRazorpay();
   return new Promise((resolve) => {
+    // Razorpay lets the student retry inside the same window after a failed attempt, so a failure only counts once they close it.
+    let failed = false;
     const rzp = new window.Razorpay!({
       key: o.keyId,
       amount: o.amountPaise,
@@ -59,9 +61,11 @@ export async function openCheckout(o: { keyId: string; orderId: string; amountPa
       prefill: { name: o.name, email: o.email },
       theme: { color: '#1e6fb8' },
       handler: (r) => resolve({ status: 'paid', payment: r }),
-      modal: { ondismiss: () => resolve({ status: 'dismissed' }) },
+      modal: { ondismiss: () => resolve({ status: failed ? 'failed' : 'dismissed' }), confirm_close: true },
     });
-    rzp.on('payment.failed', () => resolve({ status: 'failed' }));
+    rzp.on('payment.failed', () => {
+      failed = true;
+    });
     rzp.open();
   });
 }
