@@ -52,7 +52,7 @@ export class SaveQueue {
   start() {
     this.stopped = false;
     this.heartbeat = setInterval(() => void this.flush(), this.o.heartbeatMs ?? 20_000);
-    if (typeof window !== 'undefined') window.addEventListener('online', this.onOnline);
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') window.addEventListener('online', this.onOnline);
   }
 
   stop() {
@@ -60,7 +60,7 @@ export class SaveQueue {
     if (this.debounce) this.ct(this.debounce);
     if (this.retry) this.ct(this.retry);
     if (this.heartbeat) clearInterval(this.heartbeat);
-    if (typeof window !== 'undefined') window.removeEventListener('online', this.onOnline);
+    if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') window.removeEventListener('online', this.onOnline);
   }
 
   private onOnline = () => {

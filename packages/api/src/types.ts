@@ -637,3 +637,39 @@ export interface Subject {
   nameHi: string;
   topics: Array<{ code: string; nameEn: string; nameHi: string; subjectCode: string }>;
 }
+
+// ---------------------------------------------------------------- notes (rich, bilingual, likeable)
+export interface NoteListItem {
+  id: string;
+  subjectCode: string;
+  titleEn: string;
+  titleHi: string;
+  access: 'free' | 'paid';
+  version: number;
+  locked: boolean;
+  likes: number;
+  liked: boolean;
+  sectionCount: number;
+  readMinutes: number;
+  updatedAt: string;
+}
+export interface NoteBlock {
+  /** p = paragraph, li = list item, h = sub-heading */
+  t: 'p' | 'li' | 'h';
+  x: string;
+}
+export interface NoteSection {
+  anchor: string;
+  en?: { title: string; blocks: NoteBlock[] };
+  hi?: { title: string; blocks: NoteBlock[] };
+}
+export interface NoteDetail {
+  id: string;
+  subjectCode: string;
+  titleEn: string;
+  titleHi: string;
+  access: 'free' | 'paid';
+  sections: NoteSection[];
+  likes: number;
+  liked: boolean;
+}

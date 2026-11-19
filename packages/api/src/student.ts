@@ -1,5 +1,5 @@
 import type { Http } from './client';
-import type { Subject, Analytics, BillingPlan, CaItem, CaMonth, CreatedOrder, DoubtCreateBody, DoubtListItem, DoubtQuota, DoubtStatus, DoubtThread, Entitlement, Faq, InterviewQuestion, MaterialDetail, MaterialItem, MentorRequestView, NotificationPage, OrderRow, OverallLeaderboard, PlanToday, PracticeBody, PresignedPost, PyqFrequency, PyqYears, Receipt, Revision, SeriesDetail, SeriesSummary, BookmarkBody, Bookmarks, QuestionNote, ReportReason, AttemptResultView, Home, Updates, AttemptView, Exam, LeaderboardEntry, Me, Page, Review, SaveStateBody, SaveStateResult, TestDetail, TestKind, TestListItem, User } from './types';
+import type { NoteDetail, NoteListItem, Subject, Analytics, BillingPlan, CaItem, CaMonth, CreatedOrder, DoubtCreateBody, DoubtListItem, DoubtQuota, DoubtStatus, DoubtThread, Entitlement, Faq, InterviewQuestion, MaterialDetail, MaterialItem, MentorRequestView, NotificationPage, OrderRow, OverallLeaderboard, PlanToday, PracticeBody, PresignedPost, PyqFrequency, PyqYears, Receipt, Revision, SeriesDetail, SeriesSummary, BookmarkBody, Bookmarks, QuestionNote, ReportReason, AttemptResultView, Home, Updates, AttemptView, Exam, LeaderboardEntry, Me, Page, Review, SaveStateBody, SaveStateResult, TestDetail, TestKind, TestListItem, User } from './types';
 
 export interface TestFilters {
   examId?: string;
@@ -67,6 +67,10 @@ export function createStudentApi(http: Http) {
     caItem: (id: string) => http.get<CaItem>(`/ca/${id}`),
     faqs: (q?: string) => http.get<Faq[]>('/faqs', { q }),
     interview: (f: { examId?: string; category?: string } = {}) => http.get<InterviewQuestion[]>('/interview', { ...f }),
+    notesList: (subject?: string) => http.get<NoteListItem[]>('/notes', { subject }),
+    noteDetail: (id: string) => http.get<NoteDetail>(`/notes/${id}`),
+    likeNote: (id: string) => http.put<{ liked: boolean; likes: number }>(`/notes/${id}/like`),
+    unlikeNote: (id: string) => http.delete<{ liked: boolean; likes: number }>(`/notes/${id}/like`),
     materials: (f: { examId?: string; subjectCode?: string; kind?: string; page?: number; pageSize?: number } = {}) => http.get<Page<MaterialItem>>('/materials', { ...f }),
     material: (id: string) => http.get<MaterialDetail>(`/materials/${id}`),
     pyq: (f: { examId?: string; year?: number } = {}) => http.get<PyqYears>('/pyq', { ...f }),
