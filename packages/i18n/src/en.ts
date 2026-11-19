@@ -553,6 +553,17 @@ export const en = {
   'strip.progress': 'Test in progress: the timer is running',
   'me.practice': 'Practice and revision',
   'me.analytics': 'My analytics',
+  'home.explore': 'Explore',
+  'home.journey': 'Your journey',
+  'home.stat.streak': 'Day streak',
+  'home.stat.tests': 'Tests taken',
+  'home.stat.avg': 'Avg. score',
+  'home.stat.none': 'Not yet',
+  'explore.series': 'Test series',
+  'explore.live': 'Live tests',
+  'explore.daily': 'Daily quiz',
+  'explore.notes': 'Notes',
+  'explore.saved': 'Saved',
 } as const;
 
 export type MessageKey = keyof typeof en;

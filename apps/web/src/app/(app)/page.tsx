@@ -1,13 +1,29 @@
 'use client';
 import { useI18n } from '@eg/i18n';
-import { Alert, Avatar, Badge, buttonClasses, Card, ErrorState, ProgressBar, Section, Skeleton } from '@eg/ui';
-import { Bell, Flame, Radio, PlayCircle } from 'lucide-react';
+import { Alert, Avatar, Badge, buttonClasses, Card, ErrorState, ProgressBar, Section, Skeleton, Sticker, type StickerTone } from '@eg/ui';
+import { BarChart3, Bell, Bookmark, CalendarCheck, Flame, Layers, MessageCircleQuestion, Mic, NotebookPen, Newspaper, PlayCircle, Radio, ScrollText, Target, Trophy, type LucideIcon } from 'lucide-react';
+import type { MessageKey } from '@eg/i18n';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { BattleCard } from '@/components/home/battle-card';
 import { JourneyMap } from '@/components/home/journey-map';
 import { useApi, useAuth } from '@/lib/auth';
 import { formatClock } from '@/lib/time';
+
+const EXPLORE: Array<{ href: string; label: MessageKey; icon: LucideIcon; tone: StickerTone }> = [
+  { href: '/series', label: 'explore.series', icon: Layers, tone: 'indigo' },
+  { href: '/tests', label: 'explore.live', icon: Radio, tone: 'pink' },
+  { href: '/practice', label: 'nav.practice', icon: Target, tone: 'mint' },
+  { href: '/learn/materials', label: 'explore.notes', icon: NotebookPen, tone: 'sky' },
+  { href: '/learn/ca', label: 'nav.currentAffairs', icon: Newspaper, tone: 'peach' },
+  { href: '/learn/pyq', label: 'nav.pyq', icon: ScrollText, tone: 'lilac' },
+  { href: '/doubts', label: 'nav.doubts', icon: MessageCircleQuestion, tone: 'sky' },
+  { href: '/planner', label: 'nav.planner', icon: CalendarCheck, tone: 'gold' },
+  { href: '/leaderboard', label: 'nav.leaderboard', icon: Trophy, tone: 'pink' },
+  { href: '/learn/interview', label: 'nav.interview', icon: Mic, tone: 'mint' },
+  { href: '/practice/bookmarks', label: 'explore.saved', icon: Bookmark, tone: 'lilac' },
+  { href: '/practice/analytics', label: 'nav.analytics', icon: BarChart3, tone: 'indigo' },
+];
 
 function HomeSkeleton() {
   return (
@@ -57,6 +73,25 @@ export default function HomePage() {
           </Link>
         </header>
 
+        {/* three colourful stat tiles */}
+        <ul className="grid grid-cols-3 gap-3">
+          <li className="rounded-3xl bg-gradient-to-br from-[#7d67ff] to-[#4a2fd1] p-3 text-white shadow-[var(--shadow-glow)]">
+            <Flame className="size-5 text-[#ffd36b]" aria-hidden />
+            <p className="mt-2 text-3xl font-extrabold leading-none">{fmt.number(h.streak.current)}</p>
+            <p className="mt-1 text-xs text-white/85">{t('home.stat.streak')}</p>
+          </li>
+          <li className="rounded-3xl bg-gradient-to-br from-[#4fe3cb] to-[#12a995] p-3 text-white shadow-[0_10px_22px_-8px_rgb(18_169_149/0.6)]">
+            <Layers className="size-5 text-white/90" aria-hidden />
+            <p className="mt-2 text-3xl font-extrabold leading-none">{fmt.number(h.series.reduce((n, x) => n + x.attempted, 0) || h.trend.length)}</p>
+            <p className="mt-1 text-xs text-white/90">{t('home.stat.tests')}</p>
+          </li>
+          <li className="rounded-3xl bg-gradient-to-br from-[#ff9db0] to-[#e5486c] p-3 text-white shadow-[0_10px_22px_-8px_rgb(229_72_108/0.55)]">
+            <BarChart3 className="size-5 text-white/90" aria-hidden />
+            <p className="mt-2 text-3xl font-extrabold leading-none">{h.trend.length ? `${fmt.number(Math.round(h.trend.reduce((n, x) => n + x.pct, 0) / h.trend.length))}%` : '—'}</p>
+            <p className="mt-1 text-xs text-white/90">{t('home.stat.avg')}</p>
+          </li>
+        </ul>
+
         {h.plan.expiringSoon ? (
           <Alert tone="warning">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -96,6 +131,19 @@ export default function HomePage() {
         ) : null}
 
         <BattleCard />
+
+        <Section title={t('home.explore')} className="mb-0">
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {EXPLORE.map((e) => (
+              <li key={e.href + e.label}>
+                <Link href={e.href} className="group flex h-full flex-col items-center gap-2 rounded-3xl bg-white p-3 text-center shadow-card transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] active:scale-95">
+                  <Sticker icon={e.icon} tone={e.tone} size={64} className="transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105" />
+                  <span className="text-[13px] font-bold leading-tight text-ink-900">{t(e.label)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
       </div>
 
       <div className="lg:row-span-2 lg:col-start-2 lg:row-start-1">

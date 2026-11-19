@@ -2,24 +2,24 @@
 @theme {
   --font-sans: 'Inter Variable', 'Noto Sans Devanagari Variable', ui-sans-serif, system-ui, sans-serif;
 
-  --color-paper: #eaf4fc;
+  --color-paper: #eef0f8;
   --color-surface: #ffffff;
-  --color-line: #cfe2f1;
-  --color-ink-900: #16324a;
-  --color-ink-700: #2d4a62;
-  --color-ink-500: #4f677b; /* 5.2:1 on paper: passes AA for body text */
-  --color-ink-300: #a9bccb;
+  --color-line: #e0e4f3;
+  --color-ink-900: #1a1a3b;
+  --color-ink-700: #3d3f66;
+  --color-ink-500: #565a7c; /* 5.2:1 on paper: passes AA for body text */
+  --color-ink-300: #b4b7d0;
 
-  --color-primary-50: #f3f9fe;
-  --color-primary-100: #dceefb;
-  --color-primary-500: #3a8bd3;
-  --color-primary-600: #1e6fb8;
-  --color-primary-700: #165a96;
-  --color-primary-800: #104676;
+  --color-primary-50: #f4f2ff;
+  --color-primary-100: #e7e3ff;
+  --color-primary-500: #6c55f5;
+  --color-primary-600: #5a3df0;
+  --color-primary-700: #4a2fd1;
+  --color-primary-800: #3a24a6;
 
-  --color-accent-100: #fdebd0;
-  --color-accent-500: #e0782f;
-  --color-accent-700: #a24e14;
+  --color-accent-100: #ffe6df;
+  --color-accent-500: #ff7a59;
+  --color-accent-700: #b4381a;
 
   --color-danger-50: #fef2f2;
   --color-danger-600: #b91c1c;
@@ -37,13 +37,24 @@
   --color-q-answered: #16a34a;
   --color-q-marked: #7c3aed;
 
-  --color-primary-900: #0b3357;
-  --color-accent-50: #fff7ea;
+  --color-primary-900: #281a78;
+  --color-accent-50: #fff4f1;
 
-  --radius-card: 1.25rem;
-  --shadow-card: 0 1px 2px rgb(22 50 74 / 0.05), 0 6px 18px -6px rgb(30 111 184 / 0.18);
-  --shadow-lift: 0 2px 4px rgb(22 50 74 / 0.06), 0 14px 30px -8px rgb(30 111 184 / 0.32);
-  --shadow-glow: 0 8px 22px -6px rgb(30 111 184 / 0.6);
+  --color-mint-100: #d4f8f0;
+  --color-mint-500: #2fd6bf;
+  --color-mint-700: #0b8f7e;
+  --color-pink-100: #ffe1e8;
+  --color-pink-500: #ff7d95;
+  --color-sky-100: #dcf3fb;
+  --color-sky-500: #4fc3e8;
+  --color-peach-100: #ffeadd;
+  --color-lilac-100: #ece5ff;
+  --color-gold-500: #ffc14d;
+
+  --radius-card: 1.5rem;
+  --shadow-card: 0 1px 2px rgb(40 30 120 / 0.04), 0 12px 30px -12px rgb(90 61 240 / 0.20);
+  --shadow-lift: 0 2px 4px rgb(40 30 120 / 0.06), 0 18px 36px -10px rgb(90 61 240 / 0.38);
+  --shadow-glow: 0 10px 24px -6px rgb(90 61 240 / 0.6);
 
   --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-float: float 6s ease-in-out infinite;
@@ -63,14 +74,14 @@
 
 /* Reusable looks. Gradients stay inside the brand greens/saffron so text contrast on them is checked once here. */
 @utility bg-hero {
-  background: radial-gradient(120% 140% at 0% 0%, #3a8bd3 0%, #1e6fb8 45%, #0b3357 100%);
+  background: radial-gradient(120% 140% at 0% 0%, #8a76ff 0%, #5a3df0 48%, #2b1c86 100%);
 }
 @utility bg-hero-warm {
   background: linear-gradient(135deg, #fff1d6 0%, #fdebd0 40%, #fbd9a4 100%);
 }
 @utility bg-mesh {
   background-color: var(--color-paper);
-  background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(58 139 211 / 0.16), transparent 60%), radial-gradient(40rem 24rem at -10% 20%, rgb(224 120 47 / 0.10), transparent 60%);
+  background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(108 85 245 / 0.14), transparent 60%), radial-gradient(40rem 24rem at -10% 20%, rgb(47 214 191 / 0.10), transparent 60%);
   background-attachment: fixed;
 }
 @utility glass {
@@ -84,7 +95,7 @@
   }
   body {
     background: var(--color-paper);
-    background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(58 139 211 / 0.14), transparent 60%), radial-gradient(40rem 24rem at -10% 25%, rgb(224 120 47 / 0.08), transparent 60%);
+    background-image: radial-gradient(60rem 30rem at 85% -10%, rgb(108 85 245 / 0.12), transparent 60%), radial-gradient(40rem 24rem at -10% 25%, rgb(47 214 191 / 0.08), transparent 60%);
     background-attachment: fixed;
     color: var(--color-ink-900);
     font-family: var(--font-sans);

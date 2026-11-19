@@ -10,3 +10,4 @@ export * from './rich-text';
 export * from './question-view';
 export * from './illustrations';
 export * from './avatar';
+export * from './sticker';

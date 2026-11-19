@@ -29,17 +29,17 @@ function Scenery() {
     <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full" preserveAspectRatio="none" aria-hidden>
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#d5e9fa" />
-          <stop offset=".55" stopColor="#eaf4fc" />
-          <stop offset="1" stopColor="#f5fafe" />
+          <stop offset="0" stopColor="#e9e4ff" />
+          <stop offset=".55" stopColor="#f3f0ff" />
+          <stop offset="1" stopColor="#faf9ff" />
         </linearGradient>
         <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#c4def4" />
-          <stop offset="1" stopColor="#dcedfa" />
+          <stop offset="0" stopColor="#d9d0ff" />
+          <stop offset="1" stopColor="#ebe6ff" />
         </linearGradient>
         <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#cfe4f6" />
-          <stop offset="1" stopColor="#e6f1fb" />
+          <stop offset="0" stopColor="#e0d8ff" />
+          <stop offset="1" stopColor="#f1edff" />
         </linearGradient>
       </defs>
       <rect width={W} height={H} fill="url(#sky)" />
@@ -50,30 +50,30 @@ function Scenery() {
         <ellipse cx="288" cy="64" rx="30" ry="9" />
         <ellipse cx="306" cy="58" rx="18" ry="8" />
       </g>
-      <g fill="#7fa6c6" opacity=".6">
+      <g fill="#9a8de0" opacity=".6">
         {[[30, 18], [120, 52], [200, 24], [250, 90], [330, 20], [160, 14]].map(([a, b]) => (
           <circle key={`${a}${b}`} cx={a} cy={b} r="1.4" />
         ))}
       </g>
-      <path d={`M0 ${y(0.2)} C 60 ${y(0.13)}, 110 ${y(0.19)}, 170 ${y(0.15)} S 290 ${y(0.1)}, 360 ${y(0.17)} L 360 ${y(0.3)} L 0 ${y(0.3)} Z`} fill="url(#hill1)" stroke="#7fa6c6" strokeWidth="1.2" strokeOpacity=".5" />
-      <path d={`M0 ${y(0.93)} C 70 ${y(0.89)}, 130 ${y(0.95)}, 200 ${y(0.915)} S 320 ${y(0.9)}, 360 ${y(0.93)} L 360 ${H} L 0 ${H} Z`} fill="url(#hill2)" stroke="#7fa6c6" strokeWidth="1.2" strokeOpacity=".5" />
+      <path d={`M0 ${y(0.2)} C 60 ${y(0.13)}, 110 ${y(0.19)}, 170 ${y(0.15)} S 290 ${y(0.1)}, 360 ${y(0.17)} L 360 ${y(0.3)} L 0 ${y(0.3)} Z`} fill="url(#hill1)" stroke="#9a8de0" strokeWidth="1.2" strokeOpacity=".5" />
+      <path d={`M0 ${y(0.93)} C 70 ${y(0.89)}, 130 ${y(0.95)}, 200 ${y(0.915)} S 320 ${y(0.9)}, 360 ${y(0.93)} L 360 ${H} L 0 ${H} Z`} fill="url(#hill2)" stroke="#9a8de0" strokeWidth="1.2" strokeOpacity=".5" />
       {/* the road: edge, fill, dashes */}
-      <path d={roadD} fill="none" stroke="#b9d6ee" strokeWidth="30" strokeLinecap="round" />
-      <path d={roadD} fill="none" stroke="#f7fbff" strokeWidth="25" strokeLinecap="round" />
-      <path d={roadD} fill="none" stroke="#9cc3e4" strokeWidth="2.2" strokeLinecap="round" strokeDasharray="10 10" />
+      <path d={roadD} fill="none" stroke="#d7ceff" strokeWidth="30" strokeLinecap="round" />
+      <path d={roadD} fill="none" stroke="#fbfaff" strokeWidth="25" strokeLinecap="round" />
+      <path d={roadD} fill="none" stroke="#a898f0" strokeWidth="2.2" strokeLinecap="round" strokeDasharray="10 10" />
       {MILESTONES.map(([a, b]) => (
         <g key={`${a}${b}`}>
           <circle cx={x(a)} cy={y(b)} r="7" fill="#fff" />
-          <circle cx={x(a)} cy={y(b)} r="4.6" fill="#e0782f" />
+          <circle cx={x(a)} cy={y(b)} r="4.6" fill="#ff7a59" />
         </g>
       ))}
       {/* grass tufts */}
-      <g stroke="#6e93b3" strokeWidth="1.4" strokeLinecap="round" fill="none">
+      <g stroke="#8d80d8" strokeWidth="1.4" strokeLinecap="round" fill="none">
         {[[0.6, 0.27], [0.14, 0.555], [0.66, 0.43], [0.44, 0.665], [0.92, 0.79], [0.08, 0.82], [0.62, 0.73]].map(([a, b]) => (
           <path key={`${a}${b}`} d={`M${x(a) - 4} ${y(b)} q-1 -5 -4 -8 M${x(a)} ${y(b)} q1 -7 -1 -11 M${x(a) + 4} ${y(b)} q1 -6 4 -9`} />
         ))}
       </g>
-      <ellipse cx={x(0.86)} cy={y(0.545)} rx="11" ry="6" fill="#c3dcef" />
+      <ellipse cx={x(0.86)} cy={y(0.545)} rx="11" ry="6" fill="#d6cdfb" />
     </svg>
   );
 }
@@ -82,25 +82,25 @@ const Book = () => (
   <svg viewBox="0 0 96 96" className="size-full drop-shadow-md" aria-hidden>
     <g transform="rotate(-12 48 48)">
       <rect x="12" y="14" width="72" height="68" rx="7" fill="#fff" />
-      <rect x="10" y="12" width="68" height="68" rx="7" fill="#e0782f" stroke="#16324a" strokeWidth="2" />
-      <rect x="10" y="12" width="10" height="68" rx="4" fill="#b85f20" />
-      <rect x="28" y="22" width="42" height="18" rx="3" fill="#fdebdc" />
-      <path d="M33 29h30M33 35h20M30 52h38M30 60h38M30 68h26" stroke="#16324a" strokeWidth="2.4" strokeLinecap="round" />
+      <rect x="10" y="12" width="68" height="68" rx="7" fill="#ff7a59" stroke="#1a1a3b" strokeWidth="2" />
+      <rect x="10" y="12" width="10" height="68" rx="4" fill="#d9553a" />
+      <rect x="28" y="22" width="42" height="18" rx="3" fill="#ffe9e2" />
+      <path d="M33 29h30M33 35h20M30 52h38M30 60h38M30 68h26" stroke="#1a1a3b" strokeWidth="2.4" strokeLinecap="round" />
     </g>
   </svg>
 );
 const Tent = () => (
   <svg viewBox="0 0 96 96" className="size-full drop-shadow-md" aria-hidden>
-    <path d="M48 12 12 80h72z" fill="#5aa9e6" stroke="#16324a" strokeWidth="2.4" strokeLinejoin="round" />
-    <path d="M48 12 64 80H84z" fill="#2e7fc1" />
-    <path d="M48 44 34 80h28z" fill="#16324a" opacity=".9" />
-    <path d="M48 12v-6M48 6l9 3-9 3" stroke="#16324a" strokeWidth="2.4" fill="#e0782f" strokeLinejoin="round" />
+    <path d="M48 12 12 80h72z" fill="#6c55f5" stroke="#1a1a3b" strokeWidth="2.4" strokeLinejoin="round" />
+    <path d="M48 12 64 80H84z" fill="#4a2fd1" />
+    <path d="M48 44 34 80h28z" fill="#1a1a3b" opacity=".9" />
+    <path d="M48 12v-6M48 6l9 3-9 3" stroke="#1a1a3b" strokeWidth="2.4" fill="#ff7a59" strokeLinejoin="round" />
   </svg>
 );
 const Tree = () => (
   <svg viewBox="0 0 96 96" className="size-full drop-shadow-md" aria-hidden>
-    <rect x="42" y="56" width="12" height="28" rx="3" fill="#9a6b47" stroke="#16324a" strokeWidth="2" />
-    <circle cx="48" cy="36" r="26" fill="#2a9d8f" stroke="#16324a" strokeWidth="2.4" />
+    <rect x="42" y="56" width="12" height="28" rx="3" fill="#9a6b47" stroke="#1a1a3b" strokeWidth="2" />
+    <circle cx="48" cy="36" r="26" fill="#2a9d8f" stroke="#1a1a3b" strokeWidth="2.4" />
     <circle cx="36" cy="40" r="14" fill="#1f7a6f" opacity=".55" />
     <path d="M36 30l5 5M58 28l-6 7M48 46l0 9" stroke="#e6fbf7" strokeWidth="2.4" strokeLinecap="round" />
     <circle cx="58" cy="44" r="3" fill="#ffd166" />

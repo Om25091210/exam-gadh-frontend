@@ -59,7 +59,7 @@ export async function openCheckout(o: { keyId: string; orderId: string; amountPa
       description: o.description,
       order_id: o.orderId,
       prefill: { name: o.name, email: o.email },
-      theme: { color: '#1e6fb8' },
+      theme: { color: '#5a3df0' },
       handler: (r) => resolve({ status: 'paid', payment: r }),
       modal: { ondismiss: () => resolve({ status: failed ? 'failed' : 'dismissed' }), confirm_close: true },
     });
