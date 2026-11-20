@@ -708,6 +708,15 @@ export const en = {
   'app.battle.connection': 'Connection lost. Reconnecting…',
   'app.battle.leaderboard': 'Battle leaderboard',
   'app.battle.rules': 'Correct +10, faster = more (up to +5). 3 correct in a row earns ×1.5.',
+  'onb.1.title': 'Real exam-style mock tests',
+  'onb.1.body': 'Full-length and topic tests in Hindi and English, with a real timer, your rank and percentile.',
+  'onb.2.title': 'Notes, current affairs and past papers',
+  'onb.2.body': 'Read notes made by teachers, daily current affairs with Chhattisgarh first, and previous year papers.',
+  'onb.3.title': 'Battle, improve, climb the board',
+  'onb.3.body': 'Play quick 1-v-1 quiz battles, track your progress and rise on the leaderboard.',
+  'onb.next': 'Next',
+  'onb.skip': 'Skip',
+  'onb.start': 'Get started',
 } as const;
 
 export type MessageKey = keyof typeof en;

@@ -1,28 +1,42 @@
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BarChart3, ClipboardCheck, MessageCircleQuestion } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Image, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/lib/auth';
-import { DEV_LOGIN, GOOGLE_ANDROID_CLIENT_ID, GOOGLE_WEB_CLIENT_ID } from '@/lib/config';
+import { DEV_LOGIN, GOOGLE_WEB_CLIENT_ID } from '@/lib/config';
 import { useI18n, type MessageKey } from '@/lib/i18n';
 import { C, shadow } from '@/theme';
 import { Button, T } from '@/ui';
 
-WebBrowser.maybeCompleteAuthSession();
-
-function GoogleSignIn({ onToken, onBusy }: { onToken: (t: string) => void; onBusy: boolean }) {
+/**
+ * Native Google sign-in (account picker, no browser). It needs only the web client id here; Google matches the app itself by
+ * its package name and signing key (an Android OAuth client registered for them in Google Cloud Console).
+ */
+function GoogleSignIn({ onToken, busy, onFail }: { onToken: (t: string) => void; busy: boolean; onFail: () => void }) {
   const { t } = useI18n();
-  const [request, response, prompt] = Google.useIdTokenAuthRequest({ webClientId: GOOGLE_WEB_CLIENT_ID, androidClientId: GOOGLE_ANDROID_CLIENT_ID || undefined });
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const id = (response.params as { id_token?: string }).id_token;
+  const [working, setWorking] = useState(false);
+  const press = async () => {
+    if (Platform.OS !== 'android') return onFail();
+    setWorking(true);
+    try {
+      // loaded only on the phone: the library has no browser version
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { GoogleSignin } = require('@react-native-google-signin/google-signin') as typeof import('@react-native-google-signin/google-signin');
+      GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID, offlineAccess: false });
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      await GoogleSignin.signOut().catch(() => undefined); // always show the account picker
+      const res = await GoogleSignin.signIn();
+      const id = res.type === 'success' ? res.data.idToken : null;
       if (id) onToken(id);
+      else if (res.type !== 'cancelled') onFail();
+    } catch {
+      onFail();
+    } finally {
+      setWorking(false);
     }
-  }, [response, onToken]);
-  return <Button title={t('app.signin.google')} onPress={() => void prompt()} disabled={!request} loading={onBusy} />;
+  };
+  return <Button title={t('app.signin.google')} onPress={() => void press()} loading={busy || working} />;
 }
 
 export default function LoginScreen() {
@@ -64,10 +78,9 @@ export default function LoginScreen() {
         <View style={{ marginTop: 22, gap: 10 }}>
           {endedCode === 'SESSION_REPLACED' ? <T v="small" color={C.warn} center>{t('auth.sessionEnded')}</T> : null}
           {error ? <T v="small" color={C.danger} center>{t(error)}</T> : null}
-          {GOOGLE_WEB_CLIENT_ID ? <GoogleSignIn onToken={go} onBusy={busy} /> : <T v="small" color={C.warn} center>{t('app.signin.notset')}</T>}
+          {Platform.OS === 'android' ? <GoogleSignIn onToken={go} busy={busy} onFail={() => setError('app.signin.failed')} /> : DEV_LOGIN ? null : <T v="small" color={C.warn} center>{t('app.signin.notset')}</T>}
           {DEV_LOGIN ? <Button title={t('app.signin.dev')} variant="soft" onPress={() => void go(`dev:mobile1:student@example.com:Test Student`)} /> : null}
           <T v="small" center>{t('auth.single')}</T>
-          {Platform.OS === 'web' ? null : null}
         </View>
       </SafeAreaView>
     </LinearGradient>

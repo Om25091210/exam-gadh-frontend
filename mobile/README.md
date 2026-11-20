@@ -4,27 +4,34 @@ Android student app. Hindi/English, light indigo theme, screenshots and screen r
 It talks to the same API as the website and shares the typed API client, the Hindi/English dictionaries and the
 exam logic (timer, autosave, question palette) with the web app (see `metro.config.js`).
 
-## Run it on your phone (development)
+## Install on your phone fast (USB cable, developer mode on)
+Google sign-in uses a native library, so Expo Go cannot run the app: use one of these.
+
+**A. Build on your computer and install over USB (fastest after the first build).** Needs Android Studio (for the Android SDK)
+and Java 17, and `adb devices` must list your phone.
 ```bash
 cd mobile
 npm install --legacy-peer-deps
-cp .env.example .env        # API url + Google client ids
-npx expo start              # scan the QR code with Expo Go (or press "a" for an emulator)
+npx expo run:android --device          # builds, installs and opens the app on the connected phone
 ```
-`EXPO_PUBLIC_DEV_LOGIN=1` shows a "Developer sign-in" button (works only against an API started with `GOOGLE_VERIFIER=dev`).
+After the first build, JavaScript changes appear instantly with `npx expo start --dev-client` (no rebuild).
 
-## Build an installable APK (needs a free Expo account, nothing else)
+**B. Cloud build, then install straight onto the phone (no Android Studio).** The cloud build itself is what takes long
+(a free Expo account queues builds); installing is one command:
 ```bash
-npm i -g eas-cli
-eas login
-eas build -p android --profile preview      # APK you can install and share
-eas build -p android --profile production   # AAB for the Play Store
+eas build -p android --profile preview        # once; wait for it to finish
+eas build:run -p android --latest             # downloads the latest build and installs it on the connected phone
 ```
 
-## Google sign-in on Android
-Google sign-in needs an **Android OAuth client** in Google Cloud Console (APIs & Services > Credentials):
-type Android, package name `com.examgadh.app`, and the SHA-1 of your signing key (`eas credentials` shows it).
-Put its client id in `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`. The existing web client id goes in `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+## Google sign-in on Android (read this if the button says "did not work")
+The app uses the native Google account picker. It only needs the **web** client id (already built in). Google recognises the
+app by its **package name `com.examgadh.app` + the SHA-1 of the key that signed the build**, so each way of building needs its
+SHA-1 registered once in Google Cloud Console > APIs & Services > Credentials > Create credentials > OAuth client ID > Android
+(package `com.examgadh.app`):
+- Cloud build (`eas build`): run `eas credentials -p android` and copy the SHA-1 fingerprint of the keystore.
+- Local build (`expo run:android`): `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android` (Windows: `%USERPROFILE%\.android\debug.keystore`).
+- Play Store: the SHA-1 shown under Play Console > App integrity > App signing.
+Several Android clients (one per SHA-1) can exist side by side. Changes can take a few minutes to apply.
 
 ## What is in the app
 Home (streak, stats, live/continue, Explore tiles, daily quiz, series), Tests (filters, detail, exam player with
