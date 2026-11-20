@@ -673,3 +673,23 @@ export interface NoteDetail {
   likes: number;
   liked: boolean;
 }
+
+// ---------------------------------------------------------------- 1-v-1 battle (REST side; the match itself runs over a socket)
+export interface BattleMe {
+  points: number;
+  played: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  bestStreak: number;
+  paid: boolean;
+  used: number;
+  limit: number;
+  /** null on a paid plan (unlimited) */
+  freeLeft: number | null;
+  canPlay: boolean;
+}
+export interface BattleLeaderboard {
+  entries: Array<{ rank: number; name: string; avatarUrl: string | null; points: number; played: number; wins: number; isMe: boolean }>;
+  me: { rank: number | null; points: number; played: number; wins: number } | null;
+}

@@ -14,6 +14,8 @@ interface Ctx {
   signIn: (idToken: string) => Promise<LoginResult>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  /** a current access token (refreshed when needed): used to open the battle socket */
+  token: () => Promise<string | null>;
 }
 const AuthCtx = createContext<Ctx | null>(null);
 
@@ -142,8 +144,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [api, endSession]);
 
   const refreshUser = useCallback(async () => setUser(await api.me()), [api]);
+  const token = useCallback(async () => access.current ?? (await refresh()), [refresh]);
 
-  const value = useMemo<Ctx>(() => ({ status, user, api, endedCode, signIn, signOut, refreshUser }), [status, user, api, endedCode, signIn, signOut, refreshUser]);
+  const value = useMemo<Ctx>(() => ({ status, user, api, endedCode, signIn, signOut, refreshUser, token }), [status, user, api, endedCode, signIn, signOut, refreshUser, token]);
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
 

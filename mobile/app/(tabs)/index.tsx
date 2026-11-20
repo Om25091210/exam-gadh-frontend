@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { BarChart3, Bell, BookMarked, Flame, Layers, Mic, Newspaper, NotebookPen, PlayCircle, Radio, ScrollText, Swords, Trophy, Zap, type LucideIcon } from 'lucide-react-native';
-import { Modal, Pressable, Text, View, useWindowDimensions } from 'react-native';
-import { useState } from 'react';
+import { Pressable, Text, View, useWindowDimensions } from 'react-native';
 import { useAuth } from '@/lib/auth';
 import { useI18n, type MessageKey } from '@/lib/i18n';
 import { C, R, shadow, type Tone } from '@/theme';
@@ -24,7 +23,6 @@ export default function HomeTab() {
   const { t, b, num } = useI18n();
   const { api, user } = useAuth();
   const pad = useTabPad();
-  const [soon, setSoon] = useState(false);
   const { width: screenW } = useWindowDimensions();
   const tileW = Math.floor((Math.min(screenW, 520) - 32 - 20) / 3);
   const q = useQuery({ queryKey: ['home'], queryFn: () => api.home() });
@@ -94,13 +92,13 @@ export default function HomeTab() {
             </Card>
           ) : null}
 
-          <Pressable onPress={() => setSoon(true)} accessibilityRole="button" style={({ pressed }) => ({ marginTop: 14, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
+          <Pressable onPress={() => router.push('/battle')} accessibilityRole="button" style={({ pressed }) => ({ marginTop: 14, transform: [{ scale: pressed ? 0.98 : 1 }] })}>
             <LinearGradient colors={['#FF8A00', '#E52E4D', '#7B2FF7']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ borderRadius: 26, padding: 18, ...shadow.lift }}>
               <Row>
                 <View style={{ flex: 1 }}>
                   <View style={{ backgroundColor: 'rgba(0,0,0,0.22)', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 99, alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                     <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: '#7CFF8A' }} />
-                    <Text style={{ color: C.white, fontSize: 11, fontWeight: '800' }}>LIVE · {t('app.home.battle.soon')}</Text>
+                    <Text style={{ color: C.white, fontSize: 11, fontWeight: '800' }}>LIVE</Text>
                   </View>
                   <Text style={{ color: C.white, fontSize: 24, fontWeight: '800', marginTop: 8 }}>{t('battle.title')}</Text>
                   <Text style={{ color: 'rgba(255,255,255,0.92)', fontSize: 13, marginTop: 2 }}>{t('battle.sub')}</Text>
@@ -162,15 +160,6 @@ export default function HomeTab() {
         </>
       )}
 
-      <Modal visible={soon} transparent animationType="fade" onRequestClose={() => setSoon(false)}>
-        <Pressable onPress={() => setSoon(false)} style={{ flex: 1, backgroundColor: 'rgba(26,26,59,0.5)', justifyContent: 'center', padding: 24 }}>
-          <Card>
-            <T v="h2">{t('battle.title')}</T>
-            <T style={{ marginVertical: 10 }}>{t('journey.soon.battle')}</T>
-            <Button title={t('app.close')} onPress={() => setSoon(false)} />
-          </Card>
-        </Pressable>
-      </Modal>
     </Screen>
   );
 }
