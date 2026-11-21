@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Crown, Eye, LogOut, ShieldCheck } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { CalendarCheck, ChevronRight, Crown, Eye, LogOut, MessageCircleQuestion, ShieldCheck } from 'lucide-react-native';
 import { Alert, Switch, Text, View } from 'react-native';
 import { useAuth } from '@/lib/auth';
 import { useI18n } from '@/lib/i18n';
@@ -29,15 +30,30 @@ export default function MeTab() {
       </LinearGradient>
 
       <Section title={t('app.me.plan')}>
-        <Card>
+        <Card onPress={() => router.push('/plans')}>
           <Row>
             <Crown size={22} color={ent ? C.gold : C.faint} />
             <View style={{ flex: 1 }}>
               <T v="h3">{ent ? ent.planId : t('app.me.noPlan')}</T>
-              {ent ? <T v="small">{t('plans.current', { date: date(ent.endsAt) })}</T> : null}
+              {ent ? <T v="small">{t('plans.current', { date: date(ent.endsAt) })}</T> : <T v="small">{t('plans.intro')}</T>}
             </View>
+            <ChevronRight size={20} color={C.faint} />
           </Row>
         </Card>
+      </Section>
+
+      <Section title={t('app.tab.mentor')}>
+        <View style={{ gap: 10 }}>
+          {([['/doubts', 'nav.doubts', MessageCircleQuestion], ['/planner', 'nav.planner', CalendarCheck]] as const).map(([href, label, Icon]) => (
+            <Card key={href} onPress={() => router.push(href)}>
+              <Row>
+                <Icon size={22} color={C.primary} />
+                <T v="h3" style={{ flex: 1 }}>{t(label)}</T>
+                <ChevronRight size={20} color={C.faint} />
+              </Row>
+            </Card>
+          ))}
+        </View>
       </Section>
 
       <Section title={t('app.me.language')}>

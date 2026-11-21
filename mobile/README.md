@@ -38,4 +38,6 @@ Home (streak, stats, live/continue, Explore tiles, daily quiz, series), Tests (f
 server-authoritative timer + offline-safe autosave + palette, result with rank/percentile, answer review),
 Learn (Notes you can read and like, Current affairs, Previous year papers, PDFs/videos, Interview prep),
 Leaderboard (podium), Profile (language, plan, privacy), Notifications.
-Not yet in the app: payments (Razorpay), doubts desk, study planner, 1-v-1 battle (needs the realtime service).
+Plans and payments (Razorpay checkout in a secure web view; cards, net banking, wallets and UPI), Doubts desk (text + photo, answers from teachers, ratings), Study planner (ask a mentor for a plan, today's tasks, weekly view) and the 1-v-1 battle are all in the app.
+
+Animations are built in code (Reanimated + SVG), so there are no extra files to bundle. Lottie or Canva artwork can be dropped into `assets/` later.

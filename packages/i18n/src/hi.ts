@@ -719,4 +719,5 @@ export const hi: Record<MessageKey, string> = {
   'onb.next': 'आगे',
   'onb.skip': 'छोड़ें',
   'onb.start': 'शुरू करें',
+  'app.tab.mentor': 'मेंटर व सहायता',
 };

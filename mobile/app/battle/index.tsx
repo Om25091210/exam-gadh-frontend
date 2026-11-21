@@ -1,14 +1,13 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import * as WebBrowser from 'expo-web-browser';
 import { Bot, Crown, Frown, Handshake, Swords, Trophy, Zap } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Alert, BackHandler, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Confetti, Pop } from '@/anim';
 import { useBattle } from '@/battle';
 import { useAuth } from '@/lib/auth';
-import { API_URL } from '@/lib/config';
 import { useI18n } from '@/lib/i18n';
 import { Options, pick, QuestionBody } from '@/question';
 import { C, shadow } from '@/theme';
@@ -63,7 +62,7 @@ export default function BattleScreen() {
 
   const m = me.data;
   const limit = s.error?.code === 'BATTLE_LIMIT' || (m && !m.canPlay);
-  const openPlans = () => void WebBrowser.openBrowserAsync(`${API_URL}/plans`);
+  const openPlans = () => router.push('/plans');
 
   // ---------------------------------------------------------------- idle: lobby
   if (s.phase === 'idle') {
@@ -193,8 +192,9 @@ export default function BattleScreen() {
     const title = e.result === 'win' ? t('app.battle.win') : e.result === 'draw' ? t('app.battle.draw') : t('app.battle.loss');
     return (
       <Screen bottomPad={30} header={<ScreenHeader title={t('app.battle.title')} back={false} />}>
+        {e.result === 'win' ? <Confetti /> : null}
         <LinearGradient colors={e.result === 'win' ? ['#4FE3CB', '#12A995'] : e.result === 'draw' ? ['#8A76FF', '#4A2FD1'] : ['#FF9DB0', '#E5486C']} style={{ borderRadius: 30, padding: 24, alignItems: 'center', ...shadow.lift }}>
-          <Icon size={56} color={C.white} />
+          <Pop><Icon size={56} color={C.white} /></Pop>
           <Text style={{ color: C.white, fontSize: 30, fontWeight: '800', marginTop: 8 }}>{title}</Text>
           {e.forfeit ? <Text style={{ color: 'rgba(255,255,255,0.9)' }}>{t('app.battle.forfeit')}</Text> : null}
           <Row gap={30} style={{ marginTop: 16 }}>

@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { Heart, Lock } from 'lucide-react-native';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { Reveal } from '@/anim';
 import { useAuth } from '@/lib/auth';
 import { useI18n } from '@/lib/i18n';
 import { C } from '@/theme';
@@ -31,8 +32,9 @@ export default function NotesList() {
           ))}
         </ScrollView>
       ) : null}
-      {notes.isLoading ? <><Skeleton /><Skeleton /></> : notes.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void notes.refetch()} /> : items.length === 0 ? <Empty text={t('app.notes.empty')} /> : items.map((n) => (
-        <Card key={n.id} style={{ marginBottom: 10 }} onPress={() => router.push(`/notes/${n.id}`)}>
+      {notes.isLoading ? <><Skeleton /><Skeleton /></> : notes.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void notes.refetch()} /> : items.length === 0 ? <Empty text={t('app.notes.empty')} /> : items.map((n, i) => (
+        <Reveal key={n.id} delay={Math.min(i, 8) * 45}>
+        <Card style={{ marginBottom: 10 }} onPress={() => router.push(`/notes/${n.id}`)}>
           <Row>
             <Sticker icon={n.locked ? Lock : NotebookPen} tone={n.locked ? 'gold' : 'mint'} size={54} />
             <View style={{ flex: 1, gap: 4 }}>
@@ -48,6 +50,7 @@ export default function NotesList() {
             </View>
           </Row>
         </Card>
+        </Reveal>
       ))}
     </Screen>
   );

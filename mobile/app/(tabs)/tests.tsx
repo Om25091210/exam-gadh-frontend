@@ -6,6 +6,7 @@ import { ScrollView, View } from 'react-native';
 import type { TestListItem } from '@eg/api';
 import { useAuth } from '@/lib/auth';
 import { useI18n } from '@/lib/i18n';
+import { Reveal } from '@/anim';
 import { Badge, Card, Chip, Empty, ErrorBox, Row, Screen, Skeleton, Sticker, T, useTabPad } from '@/ui';
 import type { Tone } from '@/theme';
 
@@ -55,7 +56,7 @@ export default function TestsTab() {
           <Chip key={f} label={t(`app.tests.${f}` as 'app.tests.all')} active={filter === f} onPress={() => setFilter(f)} />
         ))}
       </ScrollView>
-      {q.isLoading ? <><Skeleton /><Skeleton /><Skeleton /></> : q.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void q.refetch()} /> : items.length === 0 ? <Empty text={t('app.tests.empty')} /> : items.map((x) => <TestRow key={x.id} test={x} />)}
+      {q.isLoading ? <><Skeleton /><Skeleton /><Skeleton /></> : q.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void q.refetch()} /> : items.length === 0 ? <Empty text={t('app.tests.empty')} /> : items.map((x, i) => <Reveal key={x.id} delay={Math.min(i, 8) * 45}><TestRow test={x} /></Reveal>)}
     </Screen>
   );
 }

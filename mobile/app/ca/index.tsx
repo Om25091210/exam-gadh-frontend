@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { Lock, Newspaper } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { Reveal } from '@/anim';
 import { useAuth } from '@/lib/auth';
 import { useI18n } from '@/lib/i18n';
 import { Badge, Card, Chip, Empty, ErrorBox, Row, Screen, ScreenHeader, Skeleton, Sticker, T } from '@/ui';
@@ -19,8 +20,9 @@ export default function CaList() {
         <Chip label={t('app.ca.cg')} active={cat === 'CG'} onPress={() => setCat('CG')} />
         <Chip label={t('app.ca.nat')} active={cat === 'NAT'} onPress={() => setCat('NAT')} />
       </Row>
-      {q.isLoading ? <><Skeleton /><Skeleton /></> : q.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void q.refetch()} /> : (q.data?.items.length ?? 0) === 0 ? <Empty text={t('app.ca.empty')} /> : q.data!.items.map((c) => (
-        <Card key={c.id} style={{ marginBottom: 10 }} onPress={() => router.push(`/ca/${c.id}`)}>
+      {q.isLoading ? <><Skeleton /><Skeleton /></> : q.isError ? <ErrorBox message={t('app.error')} retryLabel={t('app.retry')} onRetry={() => void q.refetch()} /> : (q.data?.items.length ?? 0) === 0 ? <Empty text={t('app.ca.empty')} /> : q.data!.items.map((c, i) => (
+        <Reveal key={c.id} delay={Math.min(i, 8) * 45}>
+        <Card style={{ marginBottom: 10 }} onPress={() => router.push(`/ca/${c.id}`)}>
           <Row>
             <Sticker icon={c.locked ? Lock : Newspaper} tone={c.locked ? 'gold' : c.category === 'CG' ? 'peach' : 'sky'} size={52} />
             <View style={{ flex: 1, gap: 4 }}>
@@ -32,6 +34,7 @@ export default function CaList() {
             </View>
           </Row>
         </Card>
+        </Reveal>
       ))}
     </Screen>
   );

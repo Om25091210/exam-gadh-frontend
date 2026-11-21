@@ -717,6 +717,7 @@ export const en = {
   'onb.next': 'Next',
   'onb.skip': 'Skip',
   'onb.start': 'Get started',
+  'app.tab.mentor': 'Mentor & help',
 } as const;
 
 export type MessageKey = keyof typeof en;
