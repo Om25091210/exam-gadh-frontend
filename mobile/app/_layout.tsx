@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { I18nProvider, useI18n } from '@/lib/i18n';
+import { ExploredProvider } from '@/lib/explored';
 import { OnboardingProvider, useOnboarding } from '@/lib/onboarding';
 import { C } from '@/theme';
 import { Loading } from '@/ui';
@@ -49,7 +50,9 @@ export default function Root() {
         <OnboardingProvider>
           <QueryClientProvider client={qc}>
             <AuthProvider>
-              <Gate />
+              <ExploredProvider>
+                <Gate />
+              </ExploredProvider>
             </AuthProvider>
           </QueryClientProvider>
         </OnboardingProvider>

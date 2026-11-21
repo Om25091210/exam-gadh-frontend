@@ -693,3 +693,14 @@ export interface BattleLeaderboard {
   entries: Array<{ rank: number; name: string; avatarUrl: string | null; points: number; played: number; wins: number; isMe: boolean }>;
   me: { rank: number | null; points: number; played: number; wins: number } | null;
 }
+
+// ---------------------------------------------------------------- daily bonus chest
+export interface ChestState {
+  day: string;
+  /** the student has finished a test, practice set or battle today */
+  eligible: boolean;
+  opened: boolean;
+  points: number | null;
+  /** eligible and not opened yet */
+  available: boolean;
+}

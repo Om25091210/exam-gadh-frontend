@@ -1,11 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
-import { Award, BookOpenCheck, CalendarCheck, ClipboardList, MessageCircleQuestion, Newspaper, NotebookPen, ScrollText, Swords, type LucideIcon } from 'lucide-react-native';
+import { Award, BookOpenCheck, Check, CalendarCheck, ClipboardList, MessageCircleQuestion, Newspaper, NotebookPen, ScrollText, Swords, type LucideIcon } from 'lucide-react-native';
 import { useEffect } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import Animated, { Easing, useAnimatedProps, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Defs, Ellipse, G, LinearGradient as SvgGradient, Path, Stop } from 'react-native-svg';
 import { Drift, Float, Pulse, Reveal, Ring, Twinkle } from '@/anim';
+import { useExplored } from '@/lib/explored';
 import { useI18n, type MessageKey } from '@/lib/i18n';
 import { C, shadow, TONES, type Tone } from '@/theme';
 
@@ -15,6 +16,8 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 const DW = 360;
 const DH = 1040;
 const ROAD = 'M180 86 C180 146 268 150 268 214 C268 276 92 270 92 334 C92 396 262 392 262 456 C262 518 96 512 96 578 C96 640 240 634 240 700 C240 762 100 756 100 822 C100 884 262 878 262 944 C262 990 180 1000 180 1030';
+
+export const JOURNEY_KEYS = ['mock', 'tests', 'notes', 'ca', 'pyq', 'battle', 'doubts', 'planner'];
 
 interface Node {
   key: string;
@@ -94,6 +97,8 @@ function Road({ w, h }: { w: number; h: number }) {
 
 function NodeView({ n, k, index, initial, mockNumber, liveOpen }: { n: Node; k: number; index: number; initial: string; mockNumber: number; liveOpen: boolean }) {
   const { t, num } = useI18n();
+  const { seen, mark } = useExplored();
+  const done = seen.has(n.key);
   const size = (n.kind === 'mock' ? 92 : 70) * k;
   const [bg, from, to] = TONES[n.tone];
   const Icon = n.icon;
@@ -130,8 +135,15 @@ function NodeView({ n, k, index, initial, mockNumber, liveOpen }: { n: Node; k: 
   return (
     <View style={{ position: 'absolute', left: n.x * k - 60 * k, top: n.y * k - size / 2, width: 120 * k, alignItems: 'center' }}>
       <Reveal delay={150 + index * 90}>
-        <Pressable onPress={() => router.push(n.href as never)} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => ({ alignItems: 'center', transform: [{ scale: pressed ? 0.94 : 1 }] })}>
-          <Float amplitude={n.kind ? 3 : 5} duration={2200 + index * 180} delay={index * 140}>{body}</Float>
+        <Pressable onPress={() => { mark(n.key); router.push(n.href as never); }} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => ({ alignItems: 'center', transform: [{ scale: pressed ? 0.94 : 1 }] })}>
+          <Float amplitude={n.kind ? 3 : 5} duration={2200 + index * 180} delay={index * 140}>
+            {body}
+            {done ? (
+              <View style={{ position: 'absolute', top: -4 * k, right: -4 * k, width: 24 * k, height: 24 * k, borderRadius: 12 * k, backgroundColor: '#16A34A', borderWidth: 2, borderColor: C.white, alignItems: 'center', justifyContent: 'center' }}>
+                <Check size={14 * k} color={C.white} strokeWidth={3.5} />
+              </View>
+            ) : null}
+          </Float>
           <View style={{ marginTop: 6, backgroundColor: 'rgba(255,255,255,0.96)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 99, ...shadow.card }}>
             <Text numberOfLines={1} style={{ fontSize: 12.5 * Math.max(k, 0.92), fontWeight: '800', color: C.ink }}>{label}</Text>
           </View>
