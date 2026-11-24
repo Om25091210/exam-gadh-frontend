@@ -5,7 +5,8 @@ const KEY_COLOR = '#C92A2A'; // [k] key term
 const NOTE_COLOR = '#1C5DBA'; // [h] highlighted note
 
 /** Text uses [b] [i] [k] (key term) [h] (note) [sub] [sup] markers. They become nested <Text> spans: never HTML. */
-export function RichText({ text, style }: { text: string; style?: StyleProp<TextStyle> }) {
+export function RichText({ text: raw, style }: { text?: string | null; style?: StyleProp<TextStyle> }) {
+  const text = typeof raw === "string" ? raw : "";
   const parts: Array<{ s: string } & Flags> = [];
   const state: Flags = { b: false, i: false, k: false, h: false, sub: false, sup: false };
   const re = /\[(\/?)(b|i|k|h|sub|sup)\]/g;
