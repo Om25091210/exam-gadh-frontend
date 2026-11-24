@@ -68,7 +68,7 @@ function Cta({ label, sub, onPress }: { label: string; sub?: string; onPress: ()
   const [w, setW] = useState(300);
   const x = useSharedValue(-120);
   useEffect(() => {
-    x.value = withRepeat(withSequence(withTiming(w + 120, { duration: 1500, easing: Easing.inOut(Easing.quad) }), withDelay(1800, withTiming(-120, { duration: 1 }))), -1, false);
+    x.value = withDelay(600, withTiming(w + 120, { duration: 1500, easing: Easing.inOut(Easing.quad) })); // one shine on arrival, no endless loop
   }, [x, w]);
   const sheen = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }, { skewX: '-20deg' }] }));
   return (

@@ -5,7 +5,7 @@ import Animated, { Easing, FadeInDown, FadeInUp, useAnimatedStyle, useSharedValu
 /** Fades and slides a block in. Use `delay` to stagger a list. */
 export function Reveal({ children, delay = 0, style, from = 'down' }: { children: ReactNode; delay?: number; style?: StyleProp<ViewStyle>; from?: 'down' | 'up' }) {
   return (
-    <Animated.View entering={(from === 'down' ? FadeInDown : FadeInUp).delay(delay).duration(480).springify().damping(18)} style={style}>
+    <Animated.View entering={(from === 'down' ? FadeInDown : FadeInUp).delay(Math.min(delay, 120)).duration(220)} style={style}>
       {children}
     </Animated.View>
   );
@@ -14,64 +14,39 @@ export function Reveal({ children, delay = 0, style, from = 'down' }: { children
 /** Pops in with a small spring (success badges, counters). */
 export function Pop({ children, delay = 0, style }: { children: ReactNode; delay?: number; style?: StyleProp<ViewStyle> }) {
   return (
-    <Animated.View entering={ZoomIn.delay(delay).springify().damping(11)} style={style}>
+    <Animated.View entering={ZoomIn.delay(Math.min(delay, 120)).duration(220)} style={style}>
       {children}
     </Animated.View>
   );
 }
 
 /** Gentle endless up-and-down float. */
-export function Float({ children, amplitude = 6, duration = 2400, delay = 0, style }: { children: ReactNode; amplitude?: number; duration?: number; delay?: number; style?: StyleProp<ViewStyle> }) {
-  const y = useSharedValue(0);
-  useEffect(() => {
-    y.value = withDelay(delay, withRepeat(withSequence(withTiming(-amplitude, { duration, easing: Easing.inOut(Easing.quad) }), withTiming(amplitude, { duration, easing: Easing.inOut(Easing.quad) })), -1, true));
-  }, [y, amplitude, duration, delay]);
-  const a = useAnimatedStyle(() => ({ transform: [{ translateY: y.value }] }));
-  return <Animated.View style={[a, style]}>{children}</Animated.View>;
+export function Float({ children, style }: { children: ReactNode; amplitude?: number; duration?: number; delay?: number; style?: StyleProp<ViewStyle> }) {
+  return <View style={style}>{children}</View>; // endless motion removed: it made the app laggy
 }
 
 /** Slow breathing scale, e.g. around the next step on the journey. */
-export function Pulse({ children, to = 1.08, duration = 900, style }: { children: ReactNode; to?: number; duration?: number; style?: StyleProp<ViewStyle> }) {
-  const s = useSharedValue(1);
-  useEffect(() => {
-    s.value = withRepeat(withSequence(withTiming(to, { duration, easing: Easing.inOut(Easing.quad) }), withTiming(1, { duration, easing: Easing.inOut(Easing.quad) })), -1, false);
-  }, [s, to, duration]);
-  const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
-  return <Animated.View style={[a, style]}>{children}</Animated.View>;
+export function Pulse({ children, style }: { children: ReactNode; to?: number; duration?: number; style?: StyleProp<ViewStyle> }) {
+  return <View style={style}>{children}</View>;
 }
 
 /** An expanding, fading ring (radar / "live" feel). */
-export function Ring({ size, color, delay = 0 }: { size: number; color: string; delay?: number }) {
-  const p = useSharedValue(0);
-  useEffect(() => {
-    p.value = withDelay(delay, withRepeat(withTiming(1, { duration: 1800, easing: Easing.out(Easing.quad) }), -1, false));
-  }, [p, delay]);
-  const a = useAnimatedStyle(() => ({ opacity: 0.55 * (1 - p.value), transform: [{ scale: 1 + p.value * 0.7 }] }));
-  return <Animated.View pointerEvents="none" style={[{ position: 'absolute', width: size, height: size, borderRadius: size / 2, borderWidth: 3, borderColor: color }, a]} />;
+export function Ring(_: { size: number; color: string; delay?: number }) {
+  return null;
 }
 
 /** Drifts sideways forever (clouds). */
-export function Drift({ children, distance = 40, duration = 9000, style }: { children: ReactNode; distance?: number; duration?: number; style?: StyleProp<ViewStyle> }) {
-  const x = useSharedValue(0);
-  useEffect(() => {
-    x.value = withRepeat(withTiming(distance, { duration, easing: Easing.inOut(Easing.sin) }), -1, true);
-  }, [x, distance, duration]);
-  const a = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
-  return <Animated.View style={[a, style]}>{children}</Animated.View>;
+export function Drift({ children, style }: { children: ReactNode; distance?: number; duration?: number; style?: StyleProp<ViewStyle> }) {
+  return <View style={style}>{children}</View>;
 }
 
 /** Twinkling sparkle dot. */
-export function Twinkle({ size = 8, color = '#FFD36B', delay = 0, style }: { size?: number; color?: string; delay?: number; style?: StyleProp<ViewStyle> }) {
-  const o = useSharedValue(0.2);
-  useEffect(() => {
-    o.value = withDelay(delay, withRepeat(withSequence(withTiming(1, { duration: 700 }), withTiming(0.2, { duration: 900 })), -1, false));
-  }, [o, delay]);
-  const a = useAnimatedStyle(() => ({ opacity: o.value, transform: [{ scale: 0.6 + o.value * 0.6 }, { rotate: '45deg' }] }));
-  return <Animated.View style={[{ width: size, height: size, borderRadius: 2, backgroundColor: color }, a, style]} />;
+export function Twinkle({ size = 8, color = '#FFD36B', style }: { size?: number; color?: string; delay?: number; style?: StyleProp<ViewStyle> }) {
+  return <View style={[{ width: size, height: size, borderRadius: 2, backgroundColor: color, opacity: 0.7, transform: [{ rotate: '45deg' }] }, style]} />;
 }
 
 /** Confetti burst for wins and successful payments. Plays once. */
-export function Confetti({ count = 26, colors = ['#FFD36B', '#FF7D95', '#2FD6BF', '#8A76FF', '#FFFFFF'] }: { count?: number; colors?: string[] }) {
+export function Confetti({ count = 12, colors = ['#FFD36B', '#FF7D95', '#2FD6BF', '#8A76FF', '#FFFFFF'] }: { count?: number; colors?: string[] }) {
   const pieces = useMemo(() => Array.from({ length: count }, (_, i) => ({ i, x: Math.random() * 100, delay: Math.random() * 500, size: 6 + Math.random() * 7, color: colors[i % colors.length], drift: (Math.random() - 0.5) * 80, spin: 180 + Math.random() * 360, dur: 1600 + Math.random() * 1200 })), [count, colors]);
   return (
     <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 420, overflow: 'hidden' }}>

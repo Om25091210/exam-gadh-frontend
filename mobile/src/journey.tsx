@@ -60,7 +60,7 @@ function Clouds({ k }: { k: number }) {
 function Road({ w, h }: { w: number; h: number }) {
   const off = useSharedValue(0);
   useEffect(() => {
-    off.value = withRepeat(withTiming(-36, { duration: 2200, easing: Easing.linear }), -1, false);
+    off.value = 0; // the moving dashes were removed: they re-drew the whole road every frame
   }, [off]);
   const props = useAnimatedProps(() => ({ strokeDashoffset: off.value }));
   const trees: Array<[number, number, number]> = [[40, 150, 1], [320, 120, 0.8], [40, 470, 0.9], [330, 600, 1], [30, 700, 0.8], [330, 820, 0.9], [34, 960, 1], [318, 1010, 0.8]];

@@ -691,6 +691,9 @@ export interface NoteLibraryTopic {
   titleEn: string;
   titleHi: string;
   access: 'free' | 'paid';
+  /** the book part this topic sits in, and a one-line description */
+  part: string;
+  blurb: string;
   sectionCount: number;
   readMinutes: number;
   completed: boolean;
