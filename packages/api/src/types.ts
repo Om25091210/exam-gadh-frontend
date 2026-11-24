@@ -653,25 +653,59 @@ export interface NoteListItem {
   readMinutes: number;
   updatedAt: string;
 }
-export interface NoteBlock {
-  /** p = paragraph, li = list item, h = sub-heading */
-  t: 'p' | 'li' | 'h';
-  x: string;
+export type NoteBlock =
+  | { t: 'p' | 'h' | 'h3' | 'h4' | 'callout'; x: string }
+  | { t: 'li'; x: string; l?: number }
+  | { t: 'table'; head?: string[] | null; rows: string[][] }
+  | { t: 'img'; k: string; a?: string; w?: number; h?: number; /** short-lived signed link, added by the server */ u?: string };
+export interface NoteLang {
+  title: string;
+  blocks: NoteBlock[];
 }
 export interface NoteSection {
   anchor: string;
-  en?: { title: string; blocks: NoteBlock[] };
-  hi?: { title: string; blocks: NoteBlock[] };
+  /** true when the student's plan does not include this subtopic: only the title is sent */
+  locked?: boolean;
+  en?: NoteLang;
+  hi?: NoteLang;
 }
 export interface NoteDetail {
   id: string;
   subjectCode: string;
+  subjectNameEn?: string;
+  subjectNameHi?: string;
   titleEn: string;
   titleHi: string;
   access: 'free' | 'paid';
+  version?: number;
+  locked?: boolean;
+  freeSections?: number;
+  completed?: boolean;
   sections: NoteSection[];
   likes: number;
   liked: boolean;
+  next?: { id: string; titleEn: string; titleHi: string } | null;
+}
+export interface NoteLibraryTopic {
+  id: string;
+  titleEn: string;
+  titleHi: string;
+  access: 'free' | 'paid';
+  sectionCount: number;
+  readMinutes: number;
+  completed: boolean;
+}
+export interface NoteLibrarySubject {
+  code: string;
+  nameEn: string;
+  nameHi: string;
+  topics: NoteLibraryTopic[];
+  completedCount: number;
+}
+export interface NoteLibrary {
+  subjects: NoteLibrarySubject[];
+  premium: boolean;
+  freeSections: number;
 }
 
 // ---------------------------------------------------------------- 1-v-1 battle (REST side; the match itself runs over a socket)

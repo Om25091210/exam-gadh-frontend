@@ -1,5 +1,5 @@
 import type { Http } from './client';
-import type { BattleLeaderboard, ChestState, BattleMe, NoteDetail, NoteListItem, Subject, Analytics, BillingPlan, CaItem, CaMonth, CreatedOrder, DoubtCreateBody, DoubtListItem, DoubtQuota, DoubtStatus, DoubtThread, Entitlement, Faq, InterviewQuestion, MaterialDetail, MaterialItem, MentorRequestView, NotificationPage, OrderRow, OverallLeaderboard, PlanToday, PracticeBody, PresignedPost, PyqFrequency, PyqYears, Receipt, Revision, SeriesDetail, SeriesSummary, BookmarkBody, Bookmarks, QuestionNote, ReportReason, AttemptResultView, Home, Updates, AttemptView, Exam, LeaderboardEntry, Me, Page, Review, SaveStateBody, SaveStateResult, TestDetail, TestKind, TestListItem, User } from './types';
+import type { NoteLibrary, BattleLeaderboard, ChestState, BattleMe, NoteDetail, NoteListItem, Subject, Analytics, BillingPlan, CaItem, CaMonth, CreatedOrder, DoubtCreateBody, DoubtListItem, DoubtQuota, DoubtStatus, DoubtThread, Entitlement, Faq, InterviewQuestion, MaterialDetail, MaterialItem, MentorRequestView, NotificationPage, OrderRow, OverallLeaderboard, PlanToday, PracticeBody, PresignedPost, PyqFrequency, PyqYears, Receipt, Revision, SeriesDetail, SeriesSummary, BookmarkBody, Bookmarks, QuestionNote, ReportReason, AttemptResultView, Home, Updates, AttemptView, Exam, LeaderboardEntry, Me, Page, Review, SaveStateBody, SaveStateResult, TestDetail, TestKind, TestListItem, User } from './types';
 
 export interface TestFilters {
   examId?: string;
@@ -72,6 +72,8 @@ export function createStudentApi(http: Http) {
     battleMe: () => http.get<BattleMe>('/battle/me'),
     battleLeaderboard: () => http.get<BattleLeaderboard>('/battle/leaderboard'),
     notesList: (subject?: string) => http.get<NoteListItem[]>('/notes', { subject }),
+    noteLibrary: () => http.get<NoteLibrary>('/library/notes'),
+    markNoteRead: (id: string, done: boolean) => (done ? http.put<{ completed: boolean }>(`/notes/${id}/read`) : http.delete<{ completed: boolean }>(`/notes/${id}/read`)),
     noteDetail: (id: string) => http.get<NoteDetail>(`/notes/${id}`),
     likeNote: (id: string) => http.put<{ liked: boolean; likes: number }>(`/notes/${id}/like`),
     unlikeNote: (id: string) => http.delete<{ liked: boolean; likes: number }>(`/notes/${id}/like`),
